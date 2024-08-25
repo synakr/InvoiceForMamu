@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 style="text-align: center; color: #4CAF50;">GST INVOICE CREDIT</h1>
+    <div class="container">
+        <div class="invoice-header">
+            <div class="invoice-no">
+                <label>Invoice No:</label>
+                <input type="text" id="invoiceNo" value="A00001">
+            </div>
+            <div class="invoice-date">
+                <label>Invoice Date:</label>
+                <input type="date" id="invoiceDate">
+            </div>
+            <div class="invoice-logo">
+                <label for="logoUpload">Upload Logo:</label>
+                <input type="file" id="logoUpload" accept="image/*">
+                <img id="logoPreview" src="#" alt="Logo Preview" style="display:none;">
+            </div>
+        </div>
+
+        <div class="billing-details">
+            <div class="billed-by">
+                <h3>MAA SARADA EMTERPRISES.</h3>
+                    <h3>12345</h3>
+                    <h3> NEW TOWN ROAD, 1ST MAIN, NEAR THANA ROAD. 799120</h3>
+                    <h3>Phone : 08119029977</h3>
+                    <h3>D.L.No. : TR/S/UDP/586/2015.</h3>
+                    <h3>GSTIN : 16EQQPS9499D2ZR</h3>
+                <input type="text" placeholder="Your Business Name">
+                <!-- Additional inputs for address, contact, etc. -->
+            </div>
+            <div class="billed-to">
+                <h3>Billed To</h3>
+                <input type="text" placeholder="Client's Business Name">
+                <!-- Additional inputs for address, contact, etc. -->
+            </div>
+        </div>
+
+        <div class="invoice-items">
+            <table id="itemsTable">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>HSN/SAC</th>
+                        <th>GST</th>
+                        <th>Quantity</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                        <th>CGST</th>
+                        <th>SGST</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" placeholder="Item Name"></td>
+                        <td><input type="text"></td>
+                        <td><input type="number" value="18" class="gst"></td>
+                        <td><input type="number" value="1" class="quantity"></td>
+                        <td><input type="number" value="1" class="rate"></td>
+                        <td><input type="number" readonly class="amount"></td>
+                        <td><input type="number" readonly class="cgst"></td>
+                        <td><input type="number" readonly class="sgst"></td>
+                        <td><input type="number" readonly class="total"></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="8" style="text-align:right;">Grand Total:</td>
+                        <td><input type="number" id="grandTotal" readonly></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <button id="addRow">Add New Line</button>
+        </div>
+
+        <div class="terms-conditions">
+            <h3>Terms & Conditions</h3>
+            <textarea id="terms" rows="4" placeholder="Enter terms and conditions here..."></textarea>
+        </div>
+
+        <div class="authority-sign">
+            <label for="signUpload">Upload Signature:</label>
+            <input type="file" id="signUpload" accept="image/*">
+            <img id="signPreview" src="#" alt="Signature Preview" style="display:none;">
+        </div>
+
+        <button id="generatePDF">Print/Download as PDF</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

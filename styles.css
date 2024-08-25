@@ -1,0 +1,68 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 100%;
+    margin: auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.invoice-no, .invoice-date, .invoice-logo {
+    flex: 1;
+    padding: 10px;
+}
+
+.billing-details {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0;
+}
+
+.billed-by, .billed-to {
+    width: 45%;
+}
+
+.invoice-items {
+    padding: 20px 0;
+}
+
+.invoice-items table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.invoice-items table th, .invoice-items table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.terms-conditions, .authority-sign {
+    padding: 20px 0;
+}
+
+#generatePDF {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#generatePDF:hover {
+    background-color: #45a049;
+}

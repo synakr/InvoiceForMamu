@@ -40,16 +40,21 @@ document.querySelectorAll('#itemsTable input').forEach(input => {
 document.getElementById('addRow').addEventListener('click', function() {
     const table = document.getElementById('itemsTable').getElementsByTagName('tbody')[0];
     const newRow = table.insertRow();
+    const rowCount = table.rows.length;
     newRow.innerHTML = `
-        <td><input type="text" placeholder="Item Name"></td>
-        <td><input type="text"></td>
-        <td><input type="number" value="18" class="gst"></td>
-        <td><input type="number" value="1" class="quantity"></td>
-        <td><input type="number" value="1" class="rate"></td>
-        <td><input type="number" readonly class="amount"></td>
-        <td><input type="number" readonly class="cgst"></td>
-        <td><input type="number" readonly class="sgst"></td>
-        <td><input type="number" readonly class="total"></td>
+        <td class="serial-no">${rowCount}</td>
+        <td><input type="text" placeholder="Product Name" class="common"></td>
+                        <td><input type="text" class="common"></td>
+                        <td><input type="number" value="18" class="gst common"></td>
+                        <td><input type="number" value="1" class="quantity common"></td>
+                        <td><input type="number" value="1" class="rate common"></td>
+                        <td><input type="text" class="common"></td>
+                        <td><input type="date" class="common"></td>
+                        <td><input type="text" class="common"></td>
+                        <td><input type="number" readonly class="amount common"></td>
+                        <td><input type="number" readonly class="cgst common"></td>
+                        <td><input type="number" readonly class="sgst common"></td>
+                        <td><input type="number" readonly class="total common"></td>
     `;
     // Add event listeners for new row
     newRow.querySelectorAll('input').forEach(input => {
@@ -59,26 +64,6 @@ document.getElementById('addRow').addEventListener('click', function() {
             updateGrandTotal();
         });
     });
-});
-
-document.getElementById('logoUpload').addEventListener('change', function(event) {
-    const reader = new FileReader();
-    reader.onload = function() {
-        const logo = document.getElementById('logoPreview');
-        logo.src = reader.result;
-        logo.style.display = 'block';
-    };
-    reader.readAsDataURL(event.target.files[0]);
-});
-
-document.getElementById('signUpload').addEventListener('change', function(event) {
-    const reader = new FileReader();
-    reader.onload = function() {
-        const sign = document.getElementById('signPreview');
-        sign.src = reader.result;
-        sign.style.display = 'block';
-    };
-    reader.readAsDataURL(event.target.files[0]);
 });
 
 document.getElementById('generatePDF').addEventListener('click', function() {

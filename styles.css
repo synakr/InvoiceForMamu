@@ -1,3 +1,14 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+#logo{
+    color: #4CAF50;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 25px;
+    
+}
 body {
     font-family: Arial, sans-serif;
     padding: 20px;
@@ -8,35 +19,53 @@ body {
 .container {
     max-width: 100%;
     margin: auto;
-    padding: 20px;
+    padding: 2px;
     background-color: #f9f9f9;
+    overflow-x: auto;
 }
 
 .invoice-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
     padding-bottom: 20px;
+    padding-top: 20px;
     border-bottom: 1px solid #ddd;
 }
 
-.invoice-no, .invoice-date, .invoice-logo {
-    flex: 1;
-    padding: 10px;
+.invoice-no, .invoice-date {
+    display: flex;
+    justify-content: center;
 }
 
 .billing-details {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     padding: 20px 0;
 }
 
 .billed-by, .billed-to {
-    width: 45%;
+    width: 100%;
+    max-width: 48%;
+    padding: 0%;
+    box-sizing: border-box;
 }
-
+.billed-to{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+#client-details{
+    resize: horizontal;
+    transform-origin: right;
+}
 .invoice-items {
-    padding: 20px 0;
+    padding: 0px 0;
+    font-size: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 .invoice-items table {
@@ -46,8 +75,10 @@ body {
 
 .invoice-items table th, .invoice-items table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 0%;
     text-align: center;
+    /* width: 50%;
+    height: 10%; */
 }
 
 .terms-conditions, .authority-sign {
@@ -61,8 +92,67 @@ body {
     color: white;
     border: none;
     cursor: pointer;
+    border-radius: 5%;
 }
 
 #generatePDF:hover {
     background-color: #45a049;
+}
+#grandTotal{
+    width: 95%;
+}
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #addRow{
+        visibility: hidden;
+    }
+    .container, .container * {
+        visibility: visible;
+    }
+    .container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+}
+#addRow{
+    background-color: #4CAF50;
+    color: white;
+    border-color: white;
+    padding: 2px;
+    border-radius: 5%;
+}
+.rate{
+    width: 95%;
+    padding: 0%;
+}
+footer{
+    background-color: #0f1111;
+    color: white;
+    text-align: center;
+}
+.common{
+    margin: 0;
+    width: 95%;
+}
+td input{
+    font-size: 10px;
+}
+.terms_sign{
+    display: flex;
+    border: 1px solid black;
+}
+.terms-conditions{
+    border-right: 0.5px solid black;
+    width: 50%;
+}
+.authorized_sign{
+    border-left: 0.5px solid black;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: end;
 }

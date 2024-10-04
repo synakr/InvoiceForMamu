@@ -11,7 +11,7 @@
 }
 body {
     font-family: Arial, sans-serif;
-    padding: 20px;
+    padding: 10px;
     margin: 0;
     box-sizing: border-box;
 }
@@ -59,7 +59,7 @@ body {
 }
 #client-details{
     resize: horizontal;
-    transform-origin: right;
+    height: 100%;
 }
 .invoice-items {
     padding: 0px 0;

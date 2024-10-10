@@ -108,6 +108,9 @@ body {
     #addRow{
         visibility: hidden;
     }
+    #generatePDF{
+        visibility: hidden;
+    }
     .container, .container * {
         visibility: visible;
     }

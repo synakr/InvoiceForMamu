@@ -36,7 +36,7 @@
         <div class="billing-details">
             <div class="billed-by">
                 <h3>BILLED BY</h3>
-                <pre>MD SAYAN AKRAM
+                <pre><input type="text" placeholder="Your Co." style="width: 15rem; background-color: transparent; border: 0px;">
 1ST MAIN, SHIVAJINAGAR
 POLICE STATION ROAD. 560072
 Phone: 08029029930
@@ -55,17 +55,17 @@ GSTIN : 29EQQPS9499D2ZR</pre>
                 <thead>
                     <tr>
                         <th>Sl No.</th>
-                        <th>Item</th>
-                        <th style="width: 10%;">Free</th>
-                        <th style="width: 4%;">GST</th>
-                        <th style="width: 5%;">Quantity</th>
-                        <th style="width: 6%;">Rate</th>
-                        <th style="width: 7%;">Batch</th>
+                        <th>Product</th>
+                        <th style="width: 10%;">Batch No.</th>
                         <th style="width: 7%;">Expiry</th>
+                        <th style="width: 5%;">Quantity</th>
+                        <th style="width: 7%;">Free</th>
                         <th style="width: 5%;">MRP</th>
+                        <th style="width: 6%;">Rate</th>
                         <th style="width: 10%;">Amount</th>
-                        <th style="width: 8%;">CGST</th>
+                        <th style="width: 4%;">GST</th>
                         <th style="width: 8%;">SGST</th>
+                        <th style="width: 8%;">CGST</th>
                         <th style="width: 10%;">Total</th>
                     </tr>
                 </thead>
@@ -74,15 +74,15 @@ GSTIN : 29EQQPS9499D2ZR</pre>
                         <td class="serial-no">1</td>
                         <td><input type="text" placeholder="Product Name" class="common"></td>
                         <td><input type="text" class="common"></td>
-                        <td><input type="number" value="18" class="gst common"></td>
-                        <td><input type="number" value="1" class="quantity common"></td>
-                        <td><input type="number" value="1" class="rate common"></td>
-                        <td><input type="text" class="common"></td>
                         <td><input type="date" class="common"></td>
+                        <td><input type="number" value="1" class="quantity common"></td>
                         <td><input type="text" class="common"></td>
+                        <td><input type="text" class="common"></td>
+                        <td><input type="number" value="1" class="rate common"></td>
                         <td><input type="number" readonly class="amount common"></td>
-                        <td><input type="number" readonly class="cgst common"></td>
+                        <td><input type="number" value="18" class="gst common"></td>
                         <td><input type="number" readonly class="sgst common"></td>
+                        <td><input type="number" readonly class="cgst common"></td>
                         <td><input type="number" readonly class="total common"></td>
                     </tr>
                 </tbody>

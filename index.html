@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice Generator</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
     
@@ -19,7 +20,8 @@
             </div>
             <div class="invoice-date">
                 <label>Invoice Date:</label>
-                <input type="date" id="invoiceDate">
+                <input type="date" id="invoiceDate" class="date-picker">
+
             </div>
         </div>
         <div class="invoice-header">
@@ -29,7 +31,8 @@
             </div>
             <div class="invoice-date">
                 <label>L.R. Date:</label>
-                <input type="date" id="invoiceDate">
+                <input type="date" id="invoiceDate" class="date-picker">
+
             </div>
         </div>
 
@@ -74,7 +77,7 @@ GSTIN : 29EQQPS9499D2ZR</pre>
                         <td class="serial-no">1</td>
                         <td><input type="text" placeholder="Product Name" class="common"></td>
                         <td><input type="text" class="common"></td>
-                        <td><input type="date" class="common"></td>
+                        <td><input type="date" id="invoiceDate" class="date-picker common"></td>
                         <td><input type="number" value="1" class="quantity common"></td>
                         <td><input type="text" class="common"></td>
                         <td><input type="text" class="common"></td>
@@ -96,6 +99,79 @@ GSTIN : 29EQQPS9499D2ZR</pre>
             <button id="addRow">Add New Line</button>
         </div>
 
+        <!-- <div class="subtotal">
+            <table id="subtable">
+                <thead>
+                    <tr>
+                        <th>CLASS</th>
+                        <th>SUB TOTAL</th>
+                        <th>SGST</th>
+                        <th>CGST</th>
+                        <th>TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="class5">
+                        <td>GST 5%</td>
+                        <td><input type="text" readonly class="justTotal"></td>
+                        <td><input type="text" readonly class="totalSgst"></td>
+                        <td><input type="text" readonly class="totalCgst"></td>
+                        <td><input type="number"></td>
+                    </tr>
+                    <tr id="class12">
+                        <td>GST 12%</td>
+                        <td><input type="text" readonly class="justTotal"></td>
+                        <td><input type="text" readonly class="totalSgst"></td>
+                        <td><input type="text" readonly class="totalCgst"></td>
+                        <td><input type="number"></td>
+                    </tr>
+                    <tr id="class18">
+                        <td>GST 18%</td>
+                        <td><input type="text" readonly class="justTotal"></td>
+                        <td><input type="text" readonly class="totalSgst"></td>
+                        <td><input type="text" readonly class="totalCgst"></td>
+                        <td><input type="number"></td>
+                    </tr>
+                    <tr id="class28">
+                        <td>GST 28%</td>
+                        <td><input type="text" readonly class="justTotal"></td>
+                        <td><input type="text" readonly class="totalSgst"></td>
+                        <td><input type="text" readonly class="totalCgst"></td>
+                        <td><input type="number"></td>
+                    </tr>
+                </tbody>
+                
+                <tfoot>
+                    
+                </tfoot>
+            </table>
+            <div class="ack">
+                <h5>IRN</h5>
+                <h5>ACK.:</h5>
+                <h5>ACK.DT:</h5>
+            </div>
+            <div class="subtotalcalculation">
+                <ul class="list1">
+                    <li>SUB TOTAL</li>
+                    <li>DISCOUNT</li>
+                    <li>GST PAYABLE</li>
+                    <li>CR/DR NOTE</li>
+                    <li>NET TOTAL</li>
+                    <li>SCHEME VALUE</li>
+                    <li>GRAND TOTAL</li>
+                </ul>
+                <ul class="list2">
+                    <li>SUB TOTAL</li>
+                    <li>DISCOUNT</li>
+                    <li>GST PAYABLE</li>
+                    <li>CR/DR NOTE</li>
+                    <li>NET TOTAL</li>
+                    <li>SCHEME VALUE</li>
+                    <li>GRAND TOTAL</li>
+                </ul>
+            </div>
+        </div> -->
+
         <div class="terms_sign">
             <div class="terms-conditions">
                 <h3><u>Terms & Conditions:</u></h3>
@@ -112,6 +188,16 @@ Bills not paid due date will attract 24% interest.
         Made with Love 	&#x2661; by Sayan
     </footer>
 
+
     <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    flatpickr(".date-picker", {
+        dateFormat: "d-m-Y",
+    });
+</script>
+    
+    
 </body>
 </html>

@@ -111,6 +111,12 @@ body {
     #generatePDF{
         visibility: hidden;
     }
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        display: none;
+    }
+    input[type="date"]::-webkit-inner-spin-button {
+        display: none;
+    }
     .container, .container * {
         visibility: visible;
     }

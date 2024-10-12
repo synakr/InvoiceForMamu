@@ -43,18 +43,18 @@ document.getElementById('addRow').addEventListener('click', function() {
     const rowCount = table.rows.length;
     newRow.innerHTML = `
         <td class="serial-no">${rowCount}</td>
-        <td><input type="text" placeholder="Product Name" class="common"></td>
-                        <td><input type="text" class="common"></td>
-                        <td><input type="number" value="18" class="gst common"></td>
-                        <td><input type="number" value="1" class="quantity common"></td>
-                        <td><input type="number" value="1" class="rate common"></td>
-                        <td><input type="text" class="common"></td>
-                        <td><input type="date" class="common"></td>
-                        <td><input type="text" class="common"></td>
-                        <td><input type="number" readonly class="amount common"></td>
-                        <td><input type="number" readonly class="cgst common"></td>
-                        <td><input type="number" readonly class="sgst common"></td>
-                        <td><input type="number" readonly class="total common"></td>
+          <td><input type="text" placeholder="Product Name" class="common"></td>
+          <td><input type="text" class="common"></td>
+          <td><input type="date" class="common"></td>
+          <td><input type="number" value="1" class="quantity common"></td>
+          <td><input type="text" class="common"></td>
+          <td><input type="text" class="common"></td>
+          <td><input type="number" value="1" class="rate common"></td>
+          <td><input type="number" readonly class="amount common"></td>
+          <td><input type="number" value="18" class="gst common"></td>
+          <td><input type="number" readonly class="sgst common"></td>
+          <td><input type="number" readonly class="cgst common"></td>
+          <td><input type="number" readonly class="total common"></td>
     `;
     // Add event listeners for new row
     newRow.querySelectorAll('input').forEach(input => {

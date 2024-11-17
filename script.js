@@ -80,7 +80,7 @@
             <td class="serial-no">${rowCount}</td>
             <td><input type="text" placeholder="Product Name" class="common"></td>
             <td><input type="text" class="common"></td>
-            <td><input type="date" class="date-picker common"></td>
+            <td><input type="text" class="common"></td>
             <td><input type="number" value="1" class="quantity common"></td>
             <td><input type="text" class="common"></td>
             <td><input type="text" class="common"></td>

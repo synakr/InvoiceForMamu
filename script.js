@@ -1,254 +1,145 @@
-/* Global Reset */
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to calculate the row total
+    function calculateRow(row) {
+        const gst = parseFloat(row.querySelector('.gst').value) || 0;
+        const quantity = parseFloat(row.querySelector('.quantity').value) || 0;
+        const rate = parseFloat(row.querySelector('.rate').value) || 0;
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 10px;
-}
+        const amount = quantity * rate;
+        const cgst = (gst / 2 / 100) * amount;
+        const sgst = (gst / 2 / 100) * amount;
+        const total = amount + cgst + sgst;
 
-.container {
-    max-width: 100%;
-    margin: auto;
-    padding: 2px;
-    background-color: #f9f9f9;
-    overflow-x: auto;
-}
-
-/* Header Section */
-#logo {
-    color: #4CAF50;
-    text-align: center;
-    font-size: 25px;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.invoice-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 20px 0;
-    border-bottom: 1px solid #ddd;
-}
-
-.invoice-no,
-.invoice-date {
-    display: flex;
-    justify-content: center;
-}
-
-.billing-details {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    padding: 20px 0;
-}
-
-.billed-by,
-.billed-to {
-    width: 100%;
-    max-width: 48%;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-.billed-to {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-/* Invoice Items Section */
-.invoice-items {
-    padding: 0;
-    font-size: 10px;
-    display: flex;
-    flex-direction: column;
-}
-
-.invoice-items table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.invoice-items table th,
-.invoice-items table td {
-    border: 1px solid #ddd;
-    padding: 0;
-    text-align: center;
-}
-
-/* Subtotal Section */
-.subtotal {
-    display: flex;
-    max-width: 100%;
-    flex-wrap: nowrap;
-}
-
-.subtotal table,
-.ack,
-.subtotalcalculation {
-    width: 33.33%;
-    border: 1px solid black;
-    padding-right: 5px;
-    padding-left: 5px;
-    box-sizing: border-box;
-}
-
-.subtotal table th,
-.subtotal table td {
-    font-size: 0.7rem;
-}
-
-.ack,
-.subtotalcalculation {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.subtotalcalculation ul {
-    list-style-type: none;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    font-size: 0.7rem;
-}
-
-.list1 {
-    width: 50%;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-}
-
-.list1 li {
-    font-weight: bold;
-    display: flex;
-    flex-direction: column;
-}
-
-.list2 {
-    width: 50%;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-/* Terms and Conditions */
-.terms_sign {
-    display: flex;
-    border: 1px solid black;
-}
-
-.terms-conditions {
-    width: 50%;
-    border-right: 1px solid black;
-    padding: 20px 0;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-}
-
-.authorized_sign {
-    width: 50%;
-    border-left: 1px solid black;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-}
-
-/* Buttons */
-#generatePDF,
-#addRow {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-#generatePDF:hover,
-#addRow:hover {
-    background-color: #45a049;
-}
-
-#addRow {
-    padding: 2px;
-    border-color: white;
-}
-
-#grandTotal {
-    width: 95%;
-}
-
-/* Responsive Design */
-@media screen and (max-width: 768px) {
-    .subtotal {
-        flex-wrap: wrap;
+        row.querySelector('.amount').value = amount.toFixed(2);
+        row.querySelector('.cgst').value = cgst.toFixed(2);
+        row.querySelector('.sgst').value = sgst.toFixed(2);
+        row.querySelector('.total').value = total.toFixed(2);
     }
 
-    .subtotal table,
-    .ack,
-    .subtotalcalculation {
-        width: 100%;
+    // Function to calculate the totals for SGST and CGST across all rows
+    function updateTaxTotals() {
+        let gstTotals = {
+            5: { amount: 0, sgst: 0, cgst: 0 },
+            12: { amount: 0, sgst: 0, cgst: 0 },
+            18: { amount: 0, sgst: 0, cgst: 0 },
+            28: { amount: 0, sgst: 0, cgst: 0 }
+        };
+
+        const rows = document.querySelectorAll('#itemsTable tbody tr');
+
+        rows.forEach(row => {
+            const gst = parseFloat(row.querySelector('.gst').value) || 0;
+            const amount = parseFloat(row.querySelector('.amount').value) || 0;
+            const sgst = parseFloat(row.querySelector('.sgst').value) || 0;
+            const cgst = parseFloat(row.querySelector('.cgst').value) || 0;
+
+            if (gstTotals[gst] !== undefined) {
+                gstTotals[gst].amount += amount;
+                gstTotals[gst].sgst += sgst;
+                gstTotals[gst].cgst += cgst;
+            }
+        });
+
+        // Update the second table with the calculated totals
+        Object.keys(gstTotals).forEach(gstClass => {
+            document.querySelector(`#class${gstClass} .justTotal`).value = gstTotals[gstClass].amount.toFixed(2);
+            document.querySelector(`#class${gstClass} .totalSgst`).value = gstTotals[gstClass].sgst.toFixed(2);
+            document.querySelector(`#class${gstClass} .totalCgst`).value = gstTotals[gstClass].cgst.toFixed(2);
+            // Update total for each GST class
+            document.querySelector(`#class${gstClass} input[type="number"]:last-child`).value = (gstTotals[gstClass].sgst + gstTotals[gstClass].cgst).toFixed(2);
+        });
     }
-}
 
-/* Print Styles */
-@media print {
-    body * {
-        visibility: hidden;
+    // Function to update the grand total
+    function updateGrandTotal() {
+        const rows = document.querySelectorAll('#itemsTable tbody tr');
+        let grandTotal = 0;
+
+        rows.forEach(row => {
+            const total = parseFloat(row.querySelector('.total').value) || 0;
+            grandTotal += total;
+        });
+
+        document.getElementById('grandTotal').value = grandTotal.toFixed(2);
+        updateList2(); // Update list2 values whenever grand total is updated
     }
 
-    .container,
-    .container * {
-        visibility: visible;
+    // Function to update the list2 values dynamically
+    function updateList2() {
+        const subTotal = Array.from(document.querySelectorAll('#itemsTable tbody tr'))
+            .reduce((acc, row) => acc + (parseFloat(row.querySelector('.amount').value) || 0), 0);
+
+        const gstPayable = Array.from(document.querySelectorAll('#subtable tbody tr'))
+            .reduce((acc, row) => acc + (parseFloat(row.querySelector('input[type="number"]:last-child').value) || 0), 0);
+
+        const netTotal = document.getElementById('grandTotal').value;
+
+        document.querySelector('.list2 li:nth-child(1)').textContent = `${subTotal.toFixed(2)}`;
+        document.querySelector('.list2 li:nth-child(3)').textContent = `${gstPayable.toFixed(2)}`;
+        document.querySelector('.list2 li:nth-child(5)').textContent = `${netTotal}`;
+        document.querySelector('.list2 li:nth-child(7)').textContent = `${netTotal}`;
     }
 
-    #addRow,
-    #generatePDF {
-        display: none;
-    }
+    // Add event listeners for real-time calculation
+    document.querySelectorAll('#itemsTable input').forEach(input => {
+        input.addEventListener('input', (event) => {
+            const row = event.target.closest('tr');
+            calculateRow(row);
+            updateGrandTotal();
+            updateTaxTotals(); // Also update SGST and CGST totals
+        });
+    });
 
-    input[type="date"] {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-    }
+    document.getElementById('addRow').addEventListener('click', function() {
+        const table = document.getElementById('itemsTable').getElementsByTagName('tbody')[0];
+        const newRow = table.insertRow();
+        const rowCount = table.rows.length;
+        newRow.innerHTML = `
+            <td class="serial-no">${rowCount}</td>
+            <td><input type="text" placeholder="Product Name" class="common"></td>
+            <td><input type="text" class="common"></td>
+            <td><input type="text" class="common"></td>
+            <td><input type="number" value="1" class="quantity common"></td>
+            <td><input type="text" class="common"></td>
+            <td><input type="text" class="common"></td>
+            <td><input type="number" value="1" class="rate common"></td>
+            <td><input type="number" readonly class="amount common"></td>
+            <td><input type="number" value="18" class="gst common"></td>
+            <td><input type="number" readonly class="sgst common"></td>
+            <td><input type="number" readonly class="cgst common"></td>
+            <td><input type="number" readonly class="total common"></td>
+        `;
 
-    input[type="date"]::-webkit-calendar-picker-indicator,
-    input[type="date"]::-webkit-inner-spin-button,
-    input[type="date"]::-moz-calendar-picker-indicator,
-    input[type="date"]::-ms-clear {
-        display: none;
-    }
-}
+        // Reapply flatpickr to the newly added date inputs
+        flatpickr(newRow.querySelectorAll(".date-picker"), {
+            dateFormat: "d-m-Y",
+        });
 
-#subtable tbody input{
-    width: 95%;
-}
+        // Add event listeners for the new row
+        newRow.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', (event) => {
+                const row = event.target.closest('tr');
+                calculateRow(row);
+                updateGrandTotal();
+                updateTaxTotals(); // Also update SGST and CGST totals
+            });
+        });
+    });
 
-footer {
-    background-color: #0f1111;
-    color: white;
-    text-align: center;
-}
+    // For date-issue
+    document.getElementById('generatePDF').addEventListener('click', function() {
+        const dateInputs = document.querySelectorAll('input[type="date"]');
+        dateInputs.forEach(dateInput => {
+            const dateValue = dateInput.value;
+            dateInput.type = 'text'; // Temporarily change the input type to text
+            dateInput.value = dateValue; // Set the text value
+            dateInput.type = 'date'; // Change back to date input after printing
+        });
+        window.print(); // Generate the PDF
+    });
 
-.common {
-    margin: 0;
-    width: 95%;
-}
-
-td input {
-    font-size: 10px;
-}
-
-/* Additional Styles */
-.rate {
-    width: 95%;
-    padding: 0;
-}
+    // Call the functions on page load to ensure proper initialization
+    updateGrandTotal();
+    updateTaxTotals();
+    updateList2(); // Initialize list2 values on page load
+});

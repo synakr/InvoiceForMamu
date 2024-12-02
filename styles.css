@@ -1,18 +1,14 @@
-*{
+/* Global Reset */
+* {
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
-#logo{
-    color: #4CAF50;
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 25px;
-}
+
 body {
     font-family: Arial, sans-serif;
-    padding: 10px;
     margin: 0;
-    box-sizing: border-box;
+    padding: 10px;
 }
 
 .container {
@@ -23,17 +19,25 @@ body {
     overflow-x: auto;
 }
 
+/* Header Section */
+#logo {
+    color: #4CAF50;
+    text-align: center;
+    font-size: 25px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 .invoice-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    padding-bottom: 20px;
-    padding-top: 20px;
+    padding: 20px 0;
     border-bottom: 1px solid #ddd;
 }
 
-.invoice-no, .invoice-date {
+.invoice-no,
+.invoice-date {
     display: flex;
     justify-content: center;
 }
@@ -45,23 +49,23 @@ body {
     padding: 20px 0;
 }
 
-.billed-by, .billed-to {
+.billed-by,
+.billed-to {
     width: 100%;
     max-width: 48%;
-    padding: 0%;
+    padding: 0;
     box-sizing: border-box;
 }
-.billed-to{
+
+.billed-to {
     display: flex;
     flex-direction: column;
-    align-items: end;
+    align-items: flex-end;
 }
-#client-details{
-    resize: horizontal;
-    height: 100%;
-}
+
+/* Invoice Items Section */
 .invoice-items {
-    padding: 0px 0;
+    padding: 0;
     font-size: 10px;
     display: flex;
     flex-direction: column;
@@ -72,158 +76,179 @@ body {
     border-collapse: collapse;
 }
 
-.invoice-items table th, .invoice-items table td {
+.invoice-items table th,
+.invoice-items table td {
     border: 1px solid #ddd;
-    padding: 0%;
+    padding: 0;
     text-align: center;
-    /* width: 50%;
-    height: 10%; */
 }
 
-.terms-conditions, .authority-sign {
+/* Subtotal Section */
+.subtotal {
+    display: flex;
+    max-width: 100%;
+    flex-wrap: nowrap;
+}
+
+.subtotal table,
+.ack,
+.subtotalcalculation {
+    width: 33.33%;
+    border: 1px solid black;
+    padding-right: 5px;
+    padding-left: 5px;
+    box-sizing: border-box;
+}
+
+.subtotal table th,
+.subtotal table td {
+    font-size: 0.7rem;
+}
+
+.ack,
+.subtotalcalculation {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.subtotalcalculation ul {
+    list-style-type: none;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 0.7rem;
+}
+
+.list1 {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.list1 li {
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+}
+
+.list2 {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+/* Terms and Conditions */
+.terms_sign {
+    display: flex;
+    border: 1px solid black;
+}
+
+.terms-conditions {
+    width: 50%;
+    border-right: 1px solid black;
     padding: 20px 0;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-#generatePDF {
-    margin-top: 20px;
-    padding: 10px 20px;
+.authorized_sign {
+    width: 50%;
+    border-left: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+/* Buttons */
+#generatePDF,
+#addRow {
     background-color: #4CAF50;
     color: white;
     border: none;
+    padding: 10px;
     cursor: pointer;
-    border-radius: 5%;
+    border-radius: 5px;
 }
-#generatePDF:hover {
+
+#generatePDF:hover,
+#addRow:hover {
     background-color: #45a049;
 }
-#grandTotal{
+
+#addRow {
+    padding: 2px;
+    border-color: white;
+}
+
+#grandTotal {
     width: 95%;
 }
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .subtotal {
+        flex-wrap: wrap;
+    }
+
+    .subtotal table,
+    .ack,
+    .subtotalcalculation {
+        width: 100%;
+    }
+}
+
+/* Print Styles */
 @media print {
     body * {
         visibility: hidden;
     }
-    #addRow{
-        visibility: hidden;
-    }
-    th{
+
+    .container,
+    .container * {
         visibility: visible;
     }
-    #generatePDF{
-        visibility: hidden;
-    }
-    .container, .container * {
-        visibility: visible;
-    }
-    .container {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-    }
-    input[type="date"]::-webkit-calendar-picker-indicator {
+
+    #addRow,
+    #generatePDF {
         display: none;
     }
-    input[type="date"]::-webkit-inner-spin-button {
-        display: none;
-    }
-    /* Firefox */
-    input[type="date"]::-moz-calendar-picker-indicator {
-        display: none;
-    }
-    /* IE/Edge */
-    input[type="date"]::-ms-clear {
-        display: none;
-    }
-    /* Fallback for all other browsers */
+
     input[type="date"] {
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
     }
+
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-moz-calendar-picker-indicator,
+    input[type="date"]::-ms-clear {
+        display: none;
+    }
 }
-#addRow{
-    background-color: #4CAF50;
-    color: white;
-    border-color: white;
-    padding: 2px;
-    border-radius: 5%;
-}
-.rate{
+
+#subtable tbody input{
     width: 95%;
-    padding: 0%;
 }
-footer{
+
+footer {
     background-color: #0f1111;
     color: white;
     text-align: center;
 }
-.common{
+
+.common {
     margin: 0;
     width: 95%;
 }
-td input{
+
+td input {
     font-size: 10px;
 }
-.terms_sign{
-    display: flex;
-    border: 1px solid black;
-}
-.terms-conditions{
-    border-right: 0.5px solid black;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    width: 50%;
-}
-.authorized_sign{
-    border-left: 0.5px solid black;
-    width: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: end;
-}
-.subtotal{
-    display: flex;
-    max-width: 100%;
-}
-.subtotal table{
-    width: 40%;
-    border-collapse: collapse;
-}
-#subtable{
-    border: 1px solid black;
-}
-#subtable th{
-    width: 50%;
-}
-.ack{
-    border: 1px solid black;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 30%;
-}
-.subtotal table th, .subtotal table td{
-    font-size: 0.7rem;
-}
-.subtotalcalculation{
-    border: 1px solid black;
-    display: flex;
-    justify-content: space-between;
-    width: 40%;
-}
-.subtotalcalculation ul{
-    list-style-type: none;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    font-size: 0.7rem;
-}
-.list1{
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-}
-.list2{
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    align-items: end;
+
+/* Additional Styles */
+.rate {
+    width: 95%;
+    padding: 0;
 }

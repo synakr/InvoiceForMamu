@@ -49,11 +49,13 @@ GSTIN : 29EQQPS9499D2ZR</pre>
             <div class="billed-to">
                 <h3>BILLED TO</h3>
                 <input type="text" placeholder="Customer's Co." style="width: 15rem; background-color: transparent; border: 0px; font-weight: bold; font-size: 1.25rem;">
-                <input type="text" value="Address: " style="width: 15rem; border: 0px;">
-                <input type="text" style="width: 15rem; border: 0px;">
-                <input type="text" value="Phone: " style="width: 15rem; border: 0px;">
-                <input type="text" value="D.L. No. " style="width: 15rem; border: 0px;">
-                <input type="text" value="GSTIN: " style="width: 15rem; border: 0px;">
+                <input type="text" class="address-input" value="Address: " style="width: 15rem; border: 0px;">
+                <input type="text" class="address-input" value="City: " style="width: 15rem; border: 0px;">
+                <input type="text" class="address-input" value="State: " style="width: 15rem; border: 0px;">
+                <input type="text" class="address-input" value="PIN: " style="width: 15rem; border: 0px;">
+                <input type="text" class="address-input" value="Phone: " style="width: 15rem; border: 0px;">
+                <input type="text" class="address-input" value="D.L. No. " style="width: 15rem; border: 0px;">
+                <input type="text" class="address-input" value="GSTIN: " style="width: 15rem; border: 0px;">
                 <!-- <textarea name="client" id="client-details" cols="30" rows="6"></textarea> -->
                 <!-- Additional inputs for address, contact, etc. -->
             </div>
@@ -105,7 +107,7 @@ GSTIN : 29EQQPS9499D2ZR</pre>
             <button id="addRow">Add New Line</button>
         </div>
 
-        <!-- <div class="subtotal">
+        <div class="subtotal">
             <table id="subtable">
                 <thead>
                     <tr>
@@ -118,28 +120,28 @@ GSTIN : 29EQQPS9499D2ZR</pre>
                 </thead>
                 <tbody>
                     <tr id="class5">
-                        <td>GST 5%</td>
+                        <td><b>GST 5%</b></td>
                         <td><input type="text" readonly class="justTotal"></td>
                         <td><input type="text" readonly class="totalSgst"></td>
                         <td><input type="text" readonly class="totalCgst"></td>
                         <td><input type="number"></td>
                     </tr>
                     <tr id="class12">
-                        <td>GST 12%</td>
+                        <td><b>GST12%</b></td>
                         <td><input type="text" readonly class="justTotal"></td>
                         <td><input type="text" readonly class="totalSgst"></td>
                         <td><input type="text" readonly class="totalCgst"></td>
                         <td><input type="number"></td>
                     </tr>
                     <tr id="class18">
-                        <td>GST 18%</td>
+                        <td><b>GST18%</b></td>
                         <td><input type="text" readonly class="justTotal"></td>
                         <td><input type="text" readonly class="totalSgst"></td>
                         <td><input type="text" readonly class="totalCgst"></td>
                         <td><input type="number"></td>
                     </tr>
                     <tr id="class28">
-                        <td>GST 28%</td>
+                        <td><b>GST28%</b></td>
                         <td><input type="text" readonly class="justTotal"></td>
                         <td><input type="text" readonly class="totalSgst"></td>
                         <td><input type="text" readonly class="totalCgst"></td>
@@ -152,9 +154,7 @@ GSTIN : 29EQQPS9499D2ZR</pre>
                 </tfoot>
             </table>
             <div class="ack">
-                <h5>IRN</h5>
-                <h5>ACK.:</h5>
-                <h5>ACK.DT:</h5>
+                <h5>IRN <BR><BR>ACK.: <br>ACK.DT:</BR></BR></h5>
             </div>
             <div class="subtotalcalculation">
                 <ul class="list1">
@@ -168,28 +168,30 @@ GSTIN : 29EQQPS9499D2ZR</pre>
                 </ul>
                 <ul class="list2">
                     <li>SUB TOTAL</li>
-                    <li>DISCOUNT</li>
+                    <li>0.00</li>
                     <li>GST PAYABLE</li>
-                    <li>CR/DR NOTE</li>
+                    <li>0.00</li>
                     <li>NET TOTAL</li>
-                    <li>SCHEME VALUE</li>
+                    <li>0.00</li>
                     <li>GRAND TOTAL</li>
                 </ul>
             </div>
-        </div> -->
+        </div>
 
         <div class="terms_sign">
             <div class="terms-conditions">
-                <h3><u>Terms & Conditions:</u></h3>
-            Goods once sold will not be taken back or exchanged. <br>
-All disputes subject to Jurisdication only. <br>
-Bills not paid due date will attract 24% interest.
+                <h3><u>TERMS & CONDITIONS:</u></h3>
+            <h6><p>GOODS ONCE SOLD WILL NOT BE TAKEN BACK OR EXCHANGED</p>
+                <p>ALL DISPUTES ARE SUBJECTED TO JURISDICTION ONLY.</p>
+                <p>BILLS NOT PAID DUE DATE WILL ATTTRACT 24% INTEREST.</p></h6>
             </div>
             <div class="authorized_sign"><h5>Authorized Signature</h5></div>
         </div>
 
         <button id="generatePDF">Download Invoice</button>
     </div>
+
+
     <footer>
         Made with Love 	&#x2661; by Sayan
     </footer>
@@ -201,6 +203,14 @@ Bills not paid due date will attract 24% interest.
 <script>
     flatpickr(".date-picker", {
         dateFormat: "d-m-Y",
+    });
+</script>
+<script>
+    document.querySelectorAll('.address-input').forEach(input => {
+      input.addEventListener('click', function() {
+        this.setSelectionRange(this.value.length, this.value.length);
+        this.focus();
+      });
     });
 </script>
     

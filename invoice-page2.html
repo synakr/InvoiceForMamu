@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator</title>
+    <link rel="stylesheet" href="styles2.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+
+<body>
+    
+    <div class="container">
+        <div id="logo"><b>GST INVOICE</b></div>
+        <div id="logo"><b>CREDIT</b></div>
+        <div class="invoice-header">
+            <div class="invoice-no">
+                <label>Invoice No:</label>
+                <input type="text" id="invoiceNo" placeholder="A00001">
+            </div>
+            <div class="invoice-date">
+                <label>Invoice Date:</label>
+                <input type="text">
+
+            </div>
+        </div>
+       
+
+        <div class="billing-details">
+            <div class="billed-by">
+                <h3>BILLED BY</h3>
+                <pre>
+                    
+<input type="text" readonly placeholder="AL HIRAJ DISTRIBUTOR" style="width: 15rem; background-color: transparent; border: 0px; font-weight: bold; font-size: 1.25rem;">
+Address: 31/3, Habib Mansion, Chikkasandra
+City: Bangalore
+State: Karnataka
+PIN: 560090
+Phone: 08119029977
+D.L.No. : KA-B20-253091, KA-B21-253092
+GSTIN : 29GBHPS2824E1ZE
+Mail: alhirajdistributors@gmail.com</pre>
+            </div>
+            <div class="billed-to">
+                <h3>BILLED TO</h3>
+                <input type="text" placeholder="Customer's Co." style="width: 100%; background-color: transparent; border: 0px; font-weight: bold; font-size: 1.25rem; overflow-wrap: break-word;">
+                <input type="text" class="address-input" value="Address: " style="width: 100%; border: 0px;">
+                <input type="text" class="address-input" value="City: " style="width: 100%; border: 0px;">
+                <input type="text" class="address-input" value="State: " style="width: 100%; border: 0px;">
+                <input type="text" class="address-input" value="PIN: " style="width: 100%; border: 0px;">
+                <input type="text" class="address-input" value="Phone: " style="width: 100%; border: 0px;">
+                <input type="text" class="address-input" value="D.L. No. " style="width: 100%; border: 0px;">
+                <input type="text" class="address-input" value="GSTIN: " style="width: 100%; border: 0px;">
+            </div>
+            
+        </div>
+
+        <div class="invoice-items">
+            <table id="itemsTable">
+                <thead>
+                    <tr>
+                        <th>Sl No.</th>
+                        <th>Product</th>
+                        <th style="width: 10%;">Batch No.</th>
+                        <th style="width: 5%;">Expiry</th>
+                        <th style="width: 5%;">Quantity</th>
+                        <th style="width: 7%;">Free</th>
+                        <th style="width: 5%;">MRP</th>
+                        <th style="width: 6%;">Rate</th>
+                        <th style="width: 6%;">Dis(%)</th>
+                        <th style="width: 10%;">Amount</th>
+                        <th style="width: 4%;">GST</th>
+                        <th style="width: 8%;">SGST</th>
+                        <th style="width: 8%;">CGST</th>
+                        <th style="width: 10%;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="serial-no">1</td>
+                        <td><input type="text" placeholder="Product Name" class="common"></td>
+                        <td><input type="text" class="common"></td>
+                        <td><input type="text" id="invoiceDate" class="common"></td>
+                        <td><input type="number" value="1" class="quantity common"></td>
+                        <td><input type="text" class="common"></td>
+                        <td><input type="text" class="common"></td>
+                        <td><input type="number" value="1" class="rate common"></td>
+                        <td><input type="number" value="0" class="discount common"></td>
+                        <td><input type="number" readonly class="amount common"></td>
+                        <td><input type="number" value="18" class="gst common"></td>
+                        <td><input type="number" readonly class="sgst common"></td>
+                        <td><input type="number" readonly class="cgst common"></td>
+                        <td><input type="number" readonly class="total common"></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="13" style="text-align:right;">Grand Total:</td>
+                        <td><input type="number" id="grandTotal" readonly></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <button id="addRow">Add New Line</button>
+        </div>
+
+        <div class="subtotal">
+            <table id="subtable">
+                <thead>
+                    <tr>
+                        <th>CLASS</th>
+                        <th>SUB TOTAL</th>
+                        <th>SGST</th>
+                        <th>CGST</th>
+                        <th>TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="class5">
+                        <td><b>GST 5%</b></td>
+                        <td><input type="text" readonly class="justTotal"></td>
+                        <td><input type="text" readonly class="totalSgst"></td>
+                        <td><input type="text" readonly class="totalCgst"></td>
+                        <td><input type="number"></td>
+                    </tr>
+                    <tr id="class12">
+                        <td><b>GST12%</b></td>
+                        <td><input type="text" readonly class="justTotal"></td>
+                        <td><input type="text" readonly class="totalSgst"></td>
+                        <td><input type="text" readonly class="totalCgst"></td>
+                        <td><input type="number"></td>
+                    </tr>
+                    <tr id="class18">
+                        <td><b>GST18%</b></td>
+                        <td><input type="text" readonly class="justTotal"></td>
+                        <td><input type="text" readonly class="totalSgst"></td>
+                        <td><input type="text" readonly class="totalCgst"></td>
+                        <td><input type="number"></td>
+                    </tr>
+                    <tr id="class28">
+                        <td><b>GST28%</b></td>
+                        <td><input type="text" readonly class="justTotal"></td>
+                        <td><input type="text" readonly class="totalSgst"></td>
+                        <td><input type="text" readonly class="totalCgst"></td>
+                        <td><input type="number"></td>
+                    </tr>
+                </tbody>
+                
+                <tfoot>
+                    
+                </tfoot>
+            </table>
+
+            <div class="bank-details">
+                <h5><u>Bank Details</u></h5>
+                <p><b>Name:</b> AL HIRAJ DISTRBUTOR</p>
+                <p><b>Bank Name:</b> Baroda Bank</p>
+                <p><b>Account No:</b> 79010200000005</p>                
+                <p><b>IFSC:</b> BARB0UDAIPU</p>
+                <p><b>UPI Id:</b> alhir81190005@barodampay</p>
+            </div>
+            <div class="qr">
+                <img src="upi-id.jpg" alt="QR Code" class="qr-code">
+            </div>
+            <div class="subtotalcalculation">
+                <ul class="list1">
+                    <li>SUB TOTAL</li>
+                    <li>DISCOUNT</li>
+                    <li>GST PAYABLE</li>
+                    <li>CR/DR NOTE</li>
+                    <li>NET TOTAL</li>
+                    <li>SCHEME VALUE</li>
+                    <li>GRAND TOTAL</li>
+                </ul>
+                <ul class="list2">
+                    <li>SUB TOTAL</li>
+                    <li>0.00</li>
+                    <li>GST PAYABLE</li>
+                    <li>0.00</li>
+                    <li>NET TOTAL</li>
+                    <li>0.00</li>
+                    <li>GRAND TOTAL</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="terms_sign">
+            <div class="terms-conditions">
+                <h3><u>TERMS & CONDITIONS:</u></h3>
+            <h6><p></p><p>GOODS ONCE SOLD WILL NOT BE TAKEN BACK OR EXCHANGED</p>
+                <p>ALL DISPUTES ARE SUBJECTED TO JURISDICTION ONLY.</p>
+                <p>BILLS NOT PAID DUE DATE WILL ATTTRACT 24% INTEREST.</p><p></p></h6>
+            </div>
+            <div class="authorized_sign"><h5>Authorized Signature</h5></div>
+        </div>
+
+        <button id="generatePDF">Download Invoice</button>
+    </div>
+
+
+    <!--Product Summary-->
+    <div class="summary">
+        
+    </div>
+
+
+    <footer>
+        Made with Love 	&#x2661; by Sayan
+    </footer>
+
+
+    <script src="script2.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    flatpickr(".date-picker", {
+        dateFormat: "d-m-Y",
+    });
+</script>
+<script>
+    document.querySelectorAll('.address-input').forEach(input => {
+      input.addEventListener('click', function() {
+        this.setSelectionRange(this.value.length, this.value.length);
+        this.focus();
+      });
+    });
+</script>
+    
+    
+</body>
+</html>

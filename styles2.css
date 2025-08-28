@@ -1,0 +1,330 @@
+/* Global Reset */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 10px;
+}
+
+.container {
+    max-width: 100%;
+    margin: auto;
+    padding: 2px;
+    background-color: #f9f9f9;
+    overflow-x: auto;
+}
+
+/* Header Section */
+#logo {
+    color: #4CAF50;
+    text-align: center;
+    font-size: 25px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 20px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.invoice-no,
+.invoice-date {
+    display: flex;
+    justify-content: center;
+}
+
+.billing-details {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 20px 0;
+}
+
+.billed-by,
+.billed-to {
+    width: 100%;
+    max-width: 48%;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.billed-to h3{
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.billed-to input{
+    width: 100%;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+    background-color: transparent;
+}
+
+.billed-to {
+    text-align: left;
+    background-color:antiquewhite;
+}
+
+@media print {
+    .billing-details {
+        flex-direction: row;
+    }
+
+    .billed-to,
+    .billed-by {
+        max-width: 50%;
+    }
+}
+
+
+/* Invoice Items Section */
+.invoice-items {
+    padding: 0;
+    font-size: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.invoice-items table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.invoice-items table th,
+.invoice-items table td {
+    border: 1px solid #ddd;
+    padding: 0;
+    text-align: center;
+}
+
+/* Subtotal Section */
+.subtotal {
+    display: flex;
+    max-width: 100%;
+    flex-wrap: nowrap;
+}
+
+.subtotal table{
+    width: 33.33%;
+    border: 1px solid black;
+    padding-right: 5px;
+    padding-left: 5px;
+    box-sizing: border-box;
+}
+
+
+.subtotalcalculation{
+    width: 22%;
+    border: 1px solid black;
+    padding-right: 5px;
+    padding-left: 5px;
+    box-sizing: border-box;
+}
+
+.bank-details {
+    width: 22%;
+    border: 1px solid black;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: left;
+    font-size: 0.8rem;
+    position: relative;
+    border-right: none;
+}
+
+.bank-details h5 {
+    margin-bottom: 10px;
+    font-size: 1rem;
+    text-decoration: underline;
+}
+
+.bank-details p {
+    margin: 5px 0;
+}
+
+/* Align QR code to the right */
+.qr-code {
+    width: 120px;
+    height: 120px;
+    position: absolute;
+    box-sizing: border-box;
+    right:10px;
+}
+
+.qr{
+    width: 22%;
+    border: 1px solid black;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: left;
+    font-size: 0.8rem;
+    position: relative;
+    border-left: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.subtotal table th,
+.subtotal table td {
+    font-size: 0.7rem;
+}
+
+.ack,
+.subtotalcalculation {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.subtotalcalculation ul {
+    list-style-type: none;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 0.7rem;
+}
+
+.list1 {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.list1 li {
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+}
+
+.list2 {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+/* Terms and Conditions */
+.terms_sign {
+    display: flex;
+    border: 1px solid black;
+}
+
+.terms-conditions {
+    width: 50%;
+    border-right: 1px solid black;
+    padding: 20px 0;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.authorized_sign {
+    width: 50%;
+    border-left: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+/* Buttons */
+#generatePDF,
+#addRow {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#generatePDF:hover,
+#addRow:hover {
+    background-color: #45a049;
+}
+
+#addRow {
+    padding: 2px;
+    border-color: white;
+}
+
+#grandTotal {
+    width: 95%;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .subtotal {
+        flex-wrap: wrap;
+    }
+
+    .subtotal table,
+    .ack,
+    .subtotalcalculation {
+        width: 100%;
+    }
+}
+
+/* Print Styles */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    .container,
+    .container * {
+        visibility: visible;
+    }
+
+    #addRow,
+    #generatePDF {
+        display: none;
+    }
+
+    input[type="date"] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-moz-calendar-picker-indicator,
+    input[type="date"]::-ms-clear {
+        display: none;
+    }
+}
+
+#subtable tbody input{
+    width: 95%;
+}
+
+footer {
+    background-color: #0f1111;
+    color: white;
+    text-align: center;
+}
+
+.common {
+    margin: 0;
+    width: 95%;
+}
+
+td input {
+    font-size: 10px;
+}
+
+/* Additional Styles */
+.rate {
+    width: 95%;
+    padding: 0;
+}

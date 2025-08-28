@@ -2,218 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Generator</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="/InvoiceForMamu/src/output.css">
+
+    <title>AL HIRAJ DISTRIBUTORS</title>
 </head>
 <body>
-    
-    <div class="container">
-        <div id="logo"><b>GST INVOICE</b></div>
-        <div id="logo"><b>CREDIT</b></div>
-        <div class="invoice-header">
-            <div class="invoice-no">
-                <label>Invoice No:</label>
-                <input type="text" id="invoiceNo" placeholder="A00001">
-            </div>
-            <div class="invoice-date">
-                <label>Invoice Date:</label>
-                <input type="text">
-
-            </div>
-        </div>
-        <div class="invoice-header">
-            <div class="invoice-no">
-                <label>L.R. No:</label>
-                <input type="text" id="invoiceNo" placeholder="A00001">
-            </div>
-            <div class="invoice-date">
-                <label>L.R. Date:</label>
-                <input type="text">
-
-            </div>
-        </div>
-
-        <div class="billing-details">
-            <div class="billed-by">
-                <h3>BILLED BY</h3>
-                <pre><input type="text" placeholder="Your Co." style="width: 15rem; background-color: transparent; border: 0px; font-weight: bold; font-size: 1.25rem;">
-1ST MAIN, SHIVAJINAGAR
-POLICE STATION ROAD. 560072
-Phone: 08029029930
-D.L.No. : BLR/S/UDP/586/2015
-GSTIN : 29EQQPS9499D2ZR</pre>
-            </div>
-            <div class="billed-to">
-                <h3>BILLED TO</h3>
-                <input type="text" placeholder="Customer's Co." style="width: 15rem; background-color: transparent; border: 0px; font-weight: bold; font-size: 1.25rem;">
-                <input type="text" class="address-input" value="Address: " style="width: 15rem; border: 0px;">
-                <input type="text" class="address-input" value="City: " style="width: 15rem; border: 0px;">
-                <input type="text" class="address-input" value="State: " style="width: 15rem; border: 0px;">
-                <input type="text" class="address-input" value="PIN: " style="width: 15rem; border: 0px;">
-                <input type="text" class="address-input" value="Phone: " style="width: 15rem; border: 0px;">
-                <input type="text" class="address-input" value="D.L. No. " style="width: 15rem; border: 0px;">
-                <input type="text" class="address-input" value="GSTIN: " style="width: 15rem; border: 0px;">
-                <!-- <textarea name="client" id="client-details" cols="30" rows="6"></textarea> -->
-                <!-- Additional inputs for address, contact, etc. -->
-            </div>
-        </div>
-
-        <div class="invoice-items">
-            <table id="itemsTable">
-                <thead>
-                    <tr>
-                        <th>Sl No.</th>
-                        <th>Product</th>
-                        <th style="width: 10%;">Batch No.</th>
-                        <th style="width: 10%;">Expiry</th>
-                        <th style="width: 5%;">Quantity</th>
-                        <th style="width: 7%;">Free</th>
-                        <th style="width: 5%;">MRP</th>
-                        <th style="width: 6%;">Rate</th>
-                        <th style="width: 10%;">Amount</th>
-                        <th style="width: 4%;">GST</th>
-                        <th style="width: 8%;">SGST</th>
-                        <th style="width: 8%;">CGST</th>
-                        <th style="width: 10%;">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="serial-no">1</td>
-                        <td><input type="text" placeholder="Product Name" class="common"></td>
-                        <td><input type="text" class="common"></td>
-                        <td><input type="text" id="invoiceDate" class="common"></td>
-                        <td><input type="number" value="1" class="quantity common"></td>
-                        <td><input type="text" class="common"></td>
-                        <td><input type="text" class="common"></td>
-                        <td><input type="number" value="1" class="rate common"></td>
-                        <td><input type="number" readonly class="amount common"></td>
-                        <td><input type="number" value="18" class="gst common"></td>
-                        <td><input type="number" readonly class="sgst common"></td>
-                        <td><input type="number" readonly class="cgst common"></td>
-                        <td><input type="number" readonly class="total common"></td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="12" style="text-align:right;">Grand Total:</td>
-                        <td><input type="number" id="grandTotal" readonly></td>
-                    </tr>
-                </tfoot>
-            </table>
-            <button id="addRow">Add New Line</button>
-        </div>
-
-        <div class="subtotal">
-            <table id="subtable">
-                <thead>
-                    <tr>
-                        <th>CLASS</th>
-                        <th>SUB TOTAL</th>
-                        <th>SGST</th>
-                        <th>CGST</th>
-                        <th>TOTAL</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr id="class5">
-                        <td><b>GST 5%</b></td>
-                        <td><input type="text" readonly class="justTotal"></td>
-                        <td><input type="text" readonly class="totalSgst"></td>
-                        <td><input type="text" readonly class="totalCgst"></td>
-                        <td><input type="number"></td>
-                    </tr>
-                    <tr id="class12">
-                        <td><b>GST12%</b></td>
-                        <td><input type="text" readonly class="justTotal"></td>
-                        <td><input type="text" readonly class="totalSgst"></td>
-                        <td><input type="text" readonly class="totalCgst"></td>
-                        <td><input type="number"></td>
-                    </tr>
-                    <tr id="class18">
-                        <td><b>GST18%</b></td>
-                        <td><input type="text" readonly class="justTotal"></td>
-                        <td><input type="text" readonly class="totalSgst"></td>
-                        <td><input type="text" readonly class="totalCgst"></td>
-                        <td><input type="number"></td>
-                    </tr>
-                    <tr id="class28">
-                        <td><b>GST28%</b></td>
-                        <td><input type="text" readonly class="justTotal"></td>
-                        <td><input type="text" readonly class="totalSgst"></td>
-                        <td><input type="text" readonly class="totalCgst"></td>
-                        <td><input type="number"></td>
-                    </tr>
-                </tbody>
-                
-                <tfoot>
-                    
-                </tfoot>
-            </table>
-            <div class="ack">
-                <h5>IRN <BR><BR>ACK.: <br>ACK.DT:</BR></BR></h5>
-            </div>
-            <div class="subtotalcalculation">
-                <ul class="list1">
-                    <li>SUB TOTAL</li>
-                    <li>DISCOUNT</li>
-                    <li>GST PAYABLE</li>
-                    <li>CR/DR NOTE</li>
-                    <li>NET TOTAL</li>
-                    <li>SCHEME VALUE</li>
-                    <li>GRAND TOTAL</li>
-                </ul>
-                <ul class="list2">
-                    <li>SUB TOTAL</li>
-                    <li>0.00</li>
-                    <li>GST PAYABLE</li>
-                    <li>0.00</li>
-                    <li>NET TOTAL</li>
-                    <li>0.00</li>
-                    <li>GRAND TOTAL</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="terms_sign">
-            <div class="terms-conditions">
-                <h3><u>TERMS & CONDITIONS:</u></h3>
-            <h6><p>GOODS ONCE SOLD WILL NOT BE TAKEN BACK OR EXCHANGED</p>
-                <p>ALL DISPUTES ARE SUBJECTED TO JURISDICTION ONLY.</p>
-                <p>BILLS NOT PAID DUE DATE WILL ATTTRACT 24% INTEREST.</p></h6>
-            </div>
-            <div class="authorized_sign"><h5>Authorized Signature</h5></div>
-        </div>
-
-        <button id="generatePDF">Download Invoice</button>
+    <section class="text-gray-400 bg-gray-900 body-font">
+  <div class="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
+    <div class="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
+      <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">"< Al-Hiraj Distributor >"</h1>
+      <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">🧪 “Before they were prescribed
+        <br class="hidden lg:inline-block">readymade generics”
+      </h1>
+      <p class="mb-8 leading-relaxed">💊 “Our advanced formulations combine trusted active ingredients with modern delivery systems to ensure safe, effective, and reliable treatment. From fast-acting tablets to sustained-release capsules, every product is manufactured to the highest quality standards, supporting better health outcomes for patients worldwide.”</p>
+      <div class="flex justify-center">
+        <button class="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg" onclick="window.location.href='invoice-page.html'">Button</button>
+        <button class="ml-4 inline-flex text-gray-400 bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 hover:text-white rounded text-lg" onclick="window.location.href='invoice-page.html'">Button</button>
+      </div>
     </div>
-
-
-    <footer>
-        Made with Love 	&#x2661; by Sayan
-    </footer>
-
-
-    <script src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-<script>
-    flatpickr(".date-picker", {
-        dateFormat: "d-m-Y",
-    });
-</script>
-<script>
-    document.querySelectorAll('.address-input').forEach(input => {
-      input.addEventListener('click', function() {
-        this.setSelectionRange(this.value.length, this.value.length);
-        this.focus();
-      });
-    });
-</script>
-    
-    
+    <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
+      <img class="object-cover object-center rounded" alt="hero" src="https://dummyimage.com/720x600">
+    </div>
+  </div>
+</section>
+<section class="text-gray-400 bg-gray-900 body-font relative">
+  <div class="container px-5 py-24 mx-auto flex sm:flex-nowrap flex-wrap">
+    <div class="lg:w-2/3 md:w-1/2 bg-gray-900 rounded-lg overflow-hidden sm:mr-10 p-10 flex items-end justify-start relative">
+      <iframe width="100%" height="100%" title="map" class="absolute inset-0" frameborder="0" marginheight="0" marginwidth="0" scrolling="no" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=%C4%B0zmir+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed" style="filter: grayscale(1) contrast(1.2) opacity(0.16);"></iframe>
+      <div class="bg-gray-900 relative flex flex-wrap py-6 rounded shadow-md">
+        <div class="lg:w-1/2 px-6">
+          <h2 class="title-font font-semibold text-white tracking-widest text-xs">ADDRESS</h2>
+          <p class="mt-1">Photo booth tattooed prism, portland taiyaki hoodie neutra typewriter</p>
+        </div>
+        <div class="lg:w-1/2 px-6 mt-4 lg:mt-0">
+          <h2 class="title-font font-semibold text-white tracking-widest text-xs">EMAIL</h2>
+          <a class="text-indigo-400 leading-relaxed">example@email.com</a>
+          <h2 class="title-font font-semibold text-white tracking-widest text-xs mt-4">PHONE</h2>
+          <p class="leading-relaxed">123-456-7890</p>
+        </div>
+      </div>
+    </div>
+    <div class="lg:w-1/3 md:w-1/2 flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0">
+      <h2 class="text-white text-lg mb-1 font-medium title-font">Feedback</h2>
+      <p class="leading-relaxed mb-5">Post-ironic portland shabby chic echo park, banjo fashion axe</p>
+      <div class="relative mb-4">
+        <label for="name" class="leading-7 text-sm text-gray-400">Name</label>
+        <input type="text" id="name" name="name" class="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+      </div>
+      <div class="relative mb-4">
+        <label for="email" class="leading-7 text-sm text-gray-400">Email</label>
+        <input type="email" id="email" name="email" class="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+      </div>
+      <div class="relative mb-4">
+        <label for="message" class="leading-7 text-sm text-gray-400">Message</label>
+        <textarea id="message" name="message" class="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 h-32 text-base outline-none text-gray-100 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+      </div>
+      <button class="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Button</button>
+      <p class="text-xs text-gray-400 text-opacity-90 mt-3">Chicharrones blog helvetica normcore iceland tousled brook viral artisan.</p>
+    </div>
+  </div>
+</section>
 </body>
 </html>

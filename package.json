@@ -1,0 +1,24 @@
+{
+  "name": "invoiceformamu",
+  "version": "1.1.0",
+  "description": "Tailwind landing page",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/synakr/InvoiceForMamu.git"
+  },
+  "author": "Md Sayan Akram",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/synakr/InvoiceForMamu/issues"
+  },
+  "homepage": "https://github.com/synakr/InvoiceForMamu#readme",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.12",
+    "tailwindcss": "^4.1.12"
+  }
+}

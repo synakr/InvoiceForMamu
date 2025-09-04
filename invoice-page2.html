@@ -11,47 +11,47 @@
 
 <body>
     
-    <div class="container">
+    <div class="main-wrapper">
+        <div class="container">
         <div id="logo"><b>GST INVOICE</b></div>
         <div id="logo"><b>CREDIT</b></div>
         <div class="invoice-header">
             <div class="invoice-no">
-                <label>Invoice No:</label>
-                <input type="text" id="invoiceNo" placeholder="A00001">
+                <label for="invoiceNo">Invoice No:</label>
+                <input type="text" id="invoiceNo" placeholder="A00001" style="width: 7rem; font-size: 0.95rem; padding: 2px 6px;">
             </div>
             <div class="invoice-date">
-                <label>Invoice Date:</label>
-                <input type="text">
-
+                <label for="invoiceDate">Invoice Date:</label>
+                <input type="text" id="invoiceDate" style="width: 7rem; font-size: 0.95rem; padding: 2px 6px;">
             </div>
         </div>
        
 
         <div class="billing-details">
             <div class="billed-by">
-                <h3>BILLED BY</h3>
-                <pre>
-                    
-<input type="text" readonly placeholder="AL HIRAJ DISTRIBUTOR" style="width: 15rem; background-color: transparent; border: 0px; font-weight: bold; font-size: 1.25rem;">
-Address: 31/3, Habib Mansion, Chikkasandra
-City: Bangalore
-State: Karnataka
-PIN: 560090
-Phone: 08119029977
-D.L.No. : KA-B20-253091, KA-B21-253092
-GSTIN : 29GBHPS2824E1ZE
-Mail: alhirajdistributors@gmail.com</pre>
+                <h3 style="font-size: 1rem; margin-bottom: 4px;">BILLED BY</h3>
+                <div class="billed-by-details" style="font-size: 0.95rem; line-height: 1.3;">
+                    <div style="font-weight: bold;">AL HIRAJ DISTRIBUTOR</div>
+                    <div>Address: 31/3, Habib Mansion, Chikkasandra</div>
+                    <div>City: Bangalore</div>
+                    <div>State: Karnataka</div>
+                    <div>PIN: 560090</div>
+                    <div>Phone: 08119029977</div>
+                    <div>D.L.No.: KA-B20-253091, KA-B21-253092</div>
+                    <div>GSTIN: 29GBHPS2824E1ZE</div>
+                    <div>Mail: alhirajdistributors@gmail.com</div>
+                </div>
             </div>
             <div class="billed-to">
-                <h3>BILLED TO</h3>
-                <input type="text" placeholder="Customer's Co." style="width: 100%; background-color: transparent; border: 0px; font-weight: bold; font-size: 1.25rem; overflow-wrap: break-word;">
-                <input type="text" class="address-input" value="Address: " style="width: 100%; border: 0px;">
-                <input type="text" class="address-input" value="City: " style="width: 100%; border: 0px;">
-                <input type="text" class="address-input" value="State: " style="width: 100%; border: 0px;">
-                <input type="text" class="address-input" value="PIN: " style="width: 100%; border: 0px;">
-                <input type="text" class="address-input" value="Phone: " style="width: 100%; border: 0px;">
-                <input type="text" class="address-input" value="D.L. No. " style="width: 100%; border: 0px;">
-                <input type="text" class="address-input" value="GSTIN: " style="width: 100%; border: 0px;">
+                <h3 style="font-size: 1rem; margin-bottom: 4px;">BILLED TO</h3>
+                <input type="text" placeholder="Customer's Co." style="width: 100%; background-color: transparent; border: 0px; font-weight: bold; font-size: 1rem; margin-bottom: 2px;">
+                <input type="text" class="address-input" value="Address: " style="width: 100%; border: 0px; font-size: 0.95rem; margin-bottom: 2px;">
+                <input type="text" class="address-input" value="City: " style="width: 100%; border: 0px; font-size: 0.95rem; margin-bottom: 2px;">
+                <input type="text" class="address-input" value="State: " style="width: 100%; border: 0px; font-size: 0.95rem; margin-bottom: 2px;">
+                <input type="text" class="address-input" value="PIN: " style="width: 100%; border: 0px; font-size: 0.95rem; margin-bottom: 2px;">
+                <input type="text" class="address-input" value="Phone: " style="width: 100%; border: 0px; font-size: 0.95rem; margin-bottom: 2px;">
+                <input type="text" class="address-input" value="D.L. No. " style="width: 100%; border: 0px; font-size: 0.95rem; margin-bottom: 2px;">
+                <input type="text" class="address-input" value="GSTIN: " style="width: 100%; border: 0px; font-size: 0.95rem; margin-bottom: 2px;">
             </div>
             
         </div>
@@ -196,6 +196,69 @@ Mail: alhirajdistributors@gmail.com</pre>
         </div>
 
         <button id="generatePDF">Download Invoice</button>
+        </div>
+        <!-- Transaction Summary Section -->
+        <div class="transaction-summary" id="transactionSummary">
+            <h3 style="margin-bottom: 8px;">Transaction Summary</h3>
+            <div class="summary-column">
+                <div class="summary-section" style="border-bottom: 1px solid #222; padding-bottom: 6px; margin-bottom: 6px;">
+                    <div id="summaryBiller">AL HIRAJ DISTRIBUTOR</div>
+                    <div style="font-size: 0.95rem;">31/3, Habib Mansion, Chikkasandra, Bangalore, Karnataka, 560090</div>
+                    <div style="font-size: 0.95rem;">Phone: 08119029977</div>
+                </div>
+                <div class="summary-section" style="border-bottom: 1px solid #222; padding-bottom: 6px; margin-bottom: 6px;">
+                    <div style="font-weight: bold;">Customer:</div>
+                    <div id="summaryCustomerName"></div>
+                    <div id="summaryCustomerAddress"></div>
+                    <div id="summaryCustomerCity"></div>
+                    <div id="summaryCustomerState"></div>
+                    <div id="summaryCustomerPin"></div>
+                    <div id="summaryCustomerPhone"></div>
+                    <div id="summaryCustomerGSTIN"></div>
+                </div>
+                <div class="summary-section" style="border-bottom: 1px solid #222; padding-bottom: 6px; margin-bottom: 6px;">
+                    <div><b>Invoice No:</b> <span id="summaryInvoiceNo"></span></div>
+                    <div><b>Invoice Date:</b> <span id="summaryInvoiceDate"></span></div>
+                </div>
+                <div class="summary-section" style="border-bottom: 1px solid #222; padding-bottom: 6px; margin-bottom: 6px;">
+                    <div style="font-weight: bold;">Acknowledgement</div>
+                    <table style="width: 100%; font-size: 0.95rem; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid #222;">
+                                <th style="text-align:left;">Bill No.</th>
+                                <th style="text-align:left;">Date</th>
+                                <th style="text-align:right;">Amount</th>
+                                <th style="text-align:right;">O/Days</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="summaryBillNo">0</td>
+                                <td id="summaryBillDate"></td>
+                                <td id="summaryBillAmount">0.00</td>
+                                <td id="summaryBillODays">0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="height: 24px;"></div>
+                </div>
+                <div class="summary-section" style="border-bottom: 1px solid #222; padding-bottom: 6px; margin-bottom: 6px;">
+                    <div><b>Sub Total:</b> <span id="summarySubTotal"></span></div>
+                    <div><b>Discount:</b> <span id="summaryDiscount"></span></div>
+                    <div><b>GST Payable:</b> <span id="summaryGSTPayable"></span></div>
+                    <div><b>CR/DR Note:</b> <span id="summaryCRDRNote">0.00</span></div>
+                    <div><b>Net Total:</b> <span id="summaryNetTotal"></span></div>
+                    <div><b>Scheme Value:</b> <span id="summarySchemeValue">0.00</span></div>
+                    <div style="font-weight: bold; margin-top: 4px;"><b>Grand Total:</b> <span id="summaryGrandTotal"></span></div>
+                </div>
+                <div class="summary-section" style="text-align: center; margin-top: 8px;">
+                    <img src="upi-id.jpg" alt="QR Code" style="width: 80px; height: 80px; border: 1px solid #222; margin-bottom: 4px;">
+                </div>
+                <div class="summary-section" style="text-align: center; font-size: 0.95rem; margin-top: 8px; border-top: 1px solid #222; padding-top: 6px;">
+                    <b>SEAL AND SIGNATORY</b>
+                </div>
+            </div>
+        </div>
     </div>
 
 

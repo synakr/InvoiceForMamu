@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('grandTotal').value = grandTotal.toFixed(2);
         updateList2();
+        updateSummarySection();
     }
 
     // Function to update the list2 values dynamically
@@ -124,6 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <td><input type="number" readonly class="total common"></td>
         `;
 
+        // Add event listeners for all inputs in the new row
         newRow.querySelectorAll('input').forEach(input => {
             input.addEventListener('input', (event) => {
                 const row = event.target.closest('tr');
@@ -132,6 +134,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateTaxTotals();
             });
         });
+
+        // Trigger calculation for the new row immediately
+        calculateRow(newRow);
+        updateGrandTotal();
+        updateTaxTotals();
     });
 
     document.getElementById('generatePDF').addEventListener('click', function() {
@@ -149,4 +156,39 @@ document.addEventListener('DOMContentLoaded', function() {
     updateGrandTotal();
     updateTaxTotals();
     updateList2();
+
+    // Update summary section with transaction details
+    function updateSummarySection() {
+    // Invoice No
+    const invoiceNo = document.getElementById('invoiceNo')?.value || '';
+    document.getElementById('summaryInvoiceNo').textContent = invoiceNo;
+    // Invoice Date
+    const invoiceDateInput = document.getElementById('invoiceDate');
+    document.getElementById('summaryInvoiceDate').textContent = invoiceDateInput?.value || '';
+    // Customer fields
+    const customerInputs = document.querySelectorAll('.billed-to input');
+    document.getElementById('summaryCustomerName').textContent = customerInputs[0]?.value || '';
+    document.getElementById('summaryCustomerAddress').textContent = customerInputs[1]?.value || '';
+    document.getElementById('summaryCustomerCity').textContent = customerInputs[2]?.value || '';
+    document.getElementById('summaryCustomerState').textContent = customerInputs[3]?.value || '';
+    document.getElementById('summaryCustomerPin').textContent = customerInputs[4]?.value || '';
+    document.getElementById('summaryCustomerPhone').textContent = customerInputs[5]?.value || '';
+    document.getElementById('summaryCustomerGSTIN').textContent = customerInputs[7]?.value || '';
+    // Subtotal, Discount, GST Payable, Net Total, Grand Total
+    document.getElementById('summarySubTotal').textContent = document.querySelector('.list2 li:nth-child(1)')?.textContent || '';
+    document.getElementById('summaryDiscount').textContent = document.querySelector('.list2 li:nth-child(2)')?.textContent || '';
+    document.getElementById('summaryGSTPayable').textContent = document.querySelector('.list2 li:nth-child(3)')?.textContent || '';
+    document.getElementById('summaryNetTotal').textContent = document.querySelector('.list2 li:nth-child(5)')?.textContent || '';
+    document.getElementById('summaryGrandTotal').textContent = document.querySelector('.list2 li:nth-child(7)')?.textContent || '';
+    // Bill No, Date, Amount, O/Days
+    document.getElementById('summaryBillNo').textContent = invoiceNo || '0';
+    document.getElementById('summaryBillDate').textContent = invoiceDateInput?.value || '';
+    document.getElementById('summaryBillAmount').textContent = document.querySelector('.list2 li:nth-child(7)')?.textContent || '0.00';
+    document.getElementById('summaryBillODays').textContent = '0';
+    }
+
+    // Update summary on input changes
+    document.querySelectorAll('#invoiceNo, .invoice-date input, .billed-to input[type="text"]').forEach(input => {
+        input.addEventListener('input', updateSummarySection);
+    });
 });

@@ -32,9 +32,12 @@ body {
     padding: 10px 12px 10px 12px;
     background-color: #fff;
     overflow-x: auto;
-    border-right: 2px solid #222;
-    border-radius: 8px 0 0 8px;
+    border: 3px solid #4CAF50;
+    box-shadow: 0 0 0 3px #fff, 0 2px 8px rgba(0,0,0,0.04);
+    border-radius: 12px 0 0 12px;
     min-height: 96vh;
+    position: relative;
+    z-index: 2;
 }
 
 /* Transaction Summary Section */
@@ -89,13 +92,15 @@ body {
     .container {
         padding: 6px 8px 6px 8px !important;
         min-height: 100vh !important;
-        border-right: 2px solid #222 !important;
-        border-radius: 8px 0 0 8px !important;
+        border: 3px solid #0f1111 !important;
+        border-radius: 12px 0 0 12px !important;
         width: 80% !important;
         max-width: 80% !important;
         flex: 0 0 80% !important;
         box-sizing: border-box !important;
         display: block !important;
+        position: relative !important;
+        z-index: 2 !important;
     }
     .transaction-summary {
         display: block !important;
@@ -433,18 +438,67 @@ body {
     .main-wrapper {
         flex-direction: column;
         min-height: unset;
+        width: 100vw;
+        border-radius: 8px;
+        border: 2px solid #222;
+        box-shadow: none;
     }
     .container {
-        border-radius: 8px 8px 0 0;
-        border-right: none;
-        min-height: unset;
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 8px 8px 0 0 !important;
+        border-right: none !important;
+        border-bottom: 1px solid #222 !important;
+        min-height: auto !important;
+        height: auto !important;
+        box-sizing: border-box;
+        padding: 10px 4px 10px 4px !important;
+        font-size: 0.95rem !important;
+        overflow-x: auto;
+        display: block !important;
+        flex: none !important;
+    }
+    .invoice-items table, .subtotal table {
+        font-size: 0.8rem !important;
+        min-width: 600px;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+    }
+    .container > * {
+        margin-bottom: 10px !important;
+        min-width: 0 !important;
+    }
+    .invoice-header, .billing-details, .invoice-items, .subtotal, .terms_sign {
+        flex-direction: column !important;
+        width: 100% !important;
+        padding: 2px 0 !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+    .billed-by, .billed-to {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin-bottom: 4px !important;
+    }
+    .invoice-items table, .subtotal table {
+        font-size: 0.8rem !important;
+        min-width: 600px;
+    }
+    .invoice-items table th, .invoice-items table td, .subtotal table th, .subtotal table td {
+        font-size: 0.8rem !important;
+        padding: 1px 2px !important;
+        word-break: break-word;
+    }
+    .terms-conditions, .authorized_sign {
+        width: 100% !important;
+        font-size: 0.8rem !important;
+        border: none !important;
+        padding: 2px 0 !important;
+        margin-bottom: 2px !important;
     }
     .transaction-summary {
-        border-radius: 0 0 8px 8px;
-        border-left: 2px solid #222;
-        min-width: unset;
-        width: 100%;
-        height: auto;
+        display: none !important;
     }
     .subtotal {
         flex-wrap: wrap;
@@ -453,6 +507,10 @@ body {
     .ack,
     .subtotalcalculation {
         width: 100%;
+    }
+    footer {
+        font-size: 0.8rem !important;
+        padding: 2px 0 !important;
     }
 }
 

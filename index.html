@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="/InvoiceForMamu/src/output.css">
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="./manifest.json">
 
     <title>AL HIRAJ DISTRIBUTORS</title>
 </head>
@@ -64,14 +64,14 @@
     </div>
   </div>
 </section>
-<button id="pwa-install" style="display:block;position:fixed;bottom:24px;right:24px;z-index:1000;padding:10px 18px;background:#4CAF50;color:#fff;border:none;border-radius:6px;font-size:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.15);cursor:pointer;">Install App</button>
+<button id="pwa-install" style="display:none;position:fixed;bottom:24px;right:24px;z-index:1000;padding:10px 18px;background:#4CAF50;color:#fff;border:none;border-radius:6px;font-size:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.15);cursor:pointer;">Install App</button>
 
 <!-- PWA Service Worker and Install Button Logic -->
 <script>
   // Register service worker for PWA
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
-      navigator.serviceWorker.register('service-worker.js').then(function(reg) {
+      navigator.serviceWorker.register('./service-worker.js').then(function(reg) {
         console.log('Service worker registered:', reg.scope);
       }).catch(function(err) {
         console.error('Service worker registration failed:', err);
@@ -91,8 +91,8 @@
   installBtn && installBtn.addEventListener('click', async () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
+      const choiceResult = await deferredPrompt.userChoice;
+      if (choiceResult && choiceResult.outcome === 'accepted') {
         installBtn.style.display = 'none';
       }
       deferredPrompt = null;

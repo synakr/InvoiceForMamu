@@ -43,30 +43,77 @@ body {
 /* Transaction Summary Section */
 .transaction-summary {
     display: none;
-    width: 170px;
-    min-width: 170px;
+    width: 185px;
+    min-width: 185px;
     height: 100%;
-    background: #fff;
-    border: 2px solid #222;
+    background: linear-gradient(180deg, #f9f9f9 0%, #fff 100%);
+    border: 2px solid #ddd;
     border-left: none;
-    box-shadow: none;
-    padding: 18px 10px 10px 10px;
-    font-size: 0.92rem;
+    box-shadow: inset 1px 0 0 rgba(0,0,0,0.05);
+    padding: 16px 12px 10px 12px;
+    font-size: 0.88rem;
     overflow-y: auto;
     align-self: stretch;
     border-radius: 0 8px 8px 0;
 }
 .transaction-summary h3 {
     color: #4CAF50;
-    font-size: 1rem;
-    margin-bottom: 8px;
+    font-size: 0.95rem;
+    margin-bottom: 12px;
     text-align: center;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #4CAF50;
 }
 .summary-column > div {
-    margin-bottom: 7px;
+    margin-bottom: 8px;
     display: flex;
     flex-direction: column;
     word-break: break-word;
+}
+
+/* Enhanced Summary Sections */
+.summary-section {
+    background: #fff !important;
+    border-radius: 4px !important;
+    padding: 8px !important;
+    margin-bottom: 8px !important;
+    font-size: 0.85rem !important;
+}
+
+.summary-section:last-child {
+    margin-bottom: 0 !important;
+}
+
+.summary-section div {
+    line-height: 1.4;
+    color: #222;
+}
+
+.summary-section b {
+    color: #4CAF50;
+    font-weight: 600;
+}
+
+.summary-section table {
+    margin-top: 4px !important;
+    font-size: 0.8rem !important;
+}
+
+.summary-section table thead tr {
+    background-color: #f0f0f0 !important;
+}
+
+.summary-section table th,
+.summary-section table td {
+    padding: 4px 3px !important;
+    border: 1px solid #ddd !important;
+}
+
+.summary-section img {
+    border-radius: 4px !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
 }
 
 @media print {
@@ -108,17 +155,24 @@ body {
         min-width: 20% !important;
         max-width: 20% !important;
         height: 100vh !important;
-        background: #fff !important;
+        background: linear-gradient(180deg, #fafafa 0%, #fff 100%) !important;
         border-left: 2px solid #0f1111 !important;
-        box-shadow: none !important;
-        padding: 10px 6px 6px 6px !important;
-        font-size: 0.92rem !important;
+        box-shadow: inset 1px 0 0 rgba(0,0,0,0.05) !important;
+        padding: 12px 8px 8px 8px !important;
+        font-size: 0.85rem !important;
         overflow-y: auto !important;
         align-self: stretch !important;
         border-radius: 0 8px 8px 0 !important;
         page-break-inside: avoid !important;
         display: block !important;
         box-sizing: border-box !important;
+    }
+    .transaction-summary h3 {
+        color: #4CAF50 !important;
+        font-size: 0.9rem !important;
+        padding-bottom: 6px !important;
+        border-bottom: 2px solid #4CAF50 !important;
+        margin-bottom: 10px !important;
     }
     .transaction-summary * {
         visibility: visible !important;
@@ -148,6 +202,37 @@ body {
     }
     .invoice-header, .billing-details, .invoice-items, .subtotal, .terms_sign {
         page-break-inside: avoid !important;
+    }
+}
+
+/* Ensure table borders print clearly */
+@media print {
+    body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .invoice-items table,
+    .invoice-items table th,
+    .invoice-items table td,
+    .subtotal table,
+    .subtotal table th,
+    .subtotal table td,
+    .transaction-summary,
+    .transaction-summary * {
+        border: 1px solid #000 !important;
+        border-color: #000 !important;
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+    .invoice-items table {
+        border-collapse: collapse !important;
+    }
+    .invoice-items table th,
+    .invoice-items table td,
+    .subtotal table th,
+    .subtotal table td {
+        padding: 3px 4px !important;
+        border-width: 1px !important;
     }
 }
 
@@ -273,34 +358,37 @@ body {
     margin-bottom: 2px;
 }
 
+/* Product summary tables: use softer borders and balanced spacing */
 .subtotal table{
     width: 33.33%;
-    border: 1px solid #222;
-    padding-right: 2px;
-    padding-left: 2px;
+    border: 1px solid #999;
+    padding-right: 6px;
+    padding-left: 6px;
     box-sizing: border-box;
     font-size: 0.8rem;
+    border-radius: 4px;
 }
 
 
 .subtotalcalculation{
     width: 22%;
-    border: 1px solid #222;
-    padding-right: 2px;
-    padding-left: 2px;
+    border: 1px solid #999;
+    padding: 6px 8px;
     box-sizing: border-box;
     font-size: 0.8rem;
+    border-radius: 4px;
 }
 
 .bank-details {
     width: 22%;
-    border: 1px solid #222;
-    padding: 4px;
+    border: 1px solid #999;
+    padding: 8px;
     box-sizing: border-box;
     text-align: left;
     font-size: 0.8rem;
     position: relative;
     border-right: none;
+    border-radius: 4px;
 }
 
 .bank-details h5 {
@@ -324,8 +412,8 @@ body {
 
 .qr{
     width: 22%;
-    border: 1px solid #222;
-    padding: 4px;
+    border: 1px solid #999;
+    padding: 8px;
     box-sizing: border-box;
     text-align: left;
     font-size: 0.8rem;
@@ -334,6 +422,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    border-radius: 4px;
 }
 
 .subtotal table th,
@@ -573,4 +662,28 @@ td input {
     width: 95%;
     padding: 0;
     font-size: 0.85rem;
+}
+
+/* Print override: keep product summary visually lighter than main invoice */
+@media print {
+    .subtotal,
+    .subtotal table,
+    .subtotal table th,
+    .subtotal table td,
+    .subtotalcalculation,
+    .bank-details,
+    .qr {
+        border: 1px solid #666 !important;
+        border-color: #666 !important;
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+    .subtotal table th,
+    .subtotal table td {
+        padding: 3px 6px !important;
+        border-width: 1px !important;
+    }
+    .subtotal {
+        box-shadow: none !important;
+    }
 }

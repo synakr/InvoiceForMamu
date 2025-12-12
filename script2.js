@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
         newRow.innerHTML = `
             <td class="serial-no">${rowCount}</td>
             <td><input type="text" placeholder="Product Name" class="common"></td>
+            <td><input type="text" class="hsn common"></td>
             <td><input type="text" class="common"></td>
             <td><input type="text" class="common"></td>
             <td><input type="number" value="1" class="quantity common"></td>

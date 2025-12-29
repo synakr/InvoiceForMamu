@@ -11,7 +11,7 @@
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     margin: 10px auto;
-    min-height: 96vh;
+    min-height: 100vh;
 }
 * {
     padding: 0;
@@ -52,7 +52,7 @@ body {
     border-left: none;
     box-shadow: inset 1px 0 0 rgba(0,0,0,0.05);
     padding: 16px 12px 10px 12px;
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     overflow-y: auto;
     align-self: stretch;
     border-radius: 0 8px 8px 0;
@@ -160,7 +160,7 @@ body {
         border-left: 2px solid #0f1111 !important;
         box-shadow: inset 1px 0 0 rgba(0,0,0,0.05) !important;
         padding: 12px 8px 8px 8px !important;
-        font-size: 0.85rem !important;
+        font-size: 1rem !important;
         overflow-y: auto !important;
         align-self: stretch !important;
         border-radius: 0 8px 8px 0 !important;
@@ -170,7 +170,7 @@ body {
     }
     .transaction-summary h3 {
         color: #4CAF50 !important;
-        font-size: 0.9rem !important;
+        font-size: 1.05rem !important;
         padding-bottom: 6px !important;
         border-bottom: 2px solid #4CAF50 !important;
         margin-bottom: 10px !important;
@@ -317,13 +317,13 @@ body {
     .billed-to,
     .billed-by {
         max-width: 46% !important;
-        font-size: 0.85rem !important;
-        padding: 1px 2px !important;
+        font-size: 1.05rem !important;
+        padding: 3px 4px !important;
         margin-bottom: 1px !important;
     }
     .billed-to input {
-        font-size: 0.85rem !important;
-        padding: 1px 2px !important;
+        font-size: 1.05rem !important;
+        padding: 3px 4px !important;
         margin-bottom: 1px !important;
     }
 }

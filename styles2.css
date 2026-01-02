@@ -109,7 +109,7 @@ body {
 .summary-section table th,
 .summary-section table td {
     padding: 4px 3px !important;
-    border: 1px solid #ddd !important;
+    /* border: 1px solid #ddd !important; */
 }
 
 .summary-section img {

@@ -1,0 +1,694 @@
+/* Global Reset */
+/* Main Wrapper Flex Layout */
+/* Main Wrapper Flex Layout */
+.main-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100vw;
+    background: #f9f9f9;
+    border: 2px solid #222;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    margin: 10px auto;
+    min-height: 100vh;
+}
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 10px;
+    line-height: 1.5;
+}
+
+.container {
+    flex: 1 1 0;
+    max-width: 100%;
+    margin: 0;
+    padding: 10px 12px 10px 12px;
+    background-color: #fff;
+    overflow-x: auto;
+    border: 3px solid #4CAF50;
+    box-shadow: 0 0 0 3px #fff, 0 2px 8px rgba(0,0,0,0.04);
+    border-radius: 12px 0 0 12px;
+    min-height: 96vh;
+    position: relative;
+    z-index: 2;
+}
+
+@media print {
+    html, body {
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-size: 10px !important;
+        zoom: 0.85 !important;
+    }
+    .main-wrapper {
+        min-height: 100vh !important;
+        height: 100vh !important;
+        border: 2px solid #222 !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    .container {
+        padding: 6px 8px 6px 8px !important;
+        min-height: 100vh !important;
+        border: 3px solid #0f1111 !important;
+        border-radius: 12px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+        box-sizing: border-box !important;
+        display: block !important;
+        position: relative !important;
+        z-index: 2 !important;
+    }
+    body * {
+        visibility: hidden !important;
+    }
+    .container, .container * {
+        visibility: visible !important;
+    }
+    #addRow,
+    #generatePDF {
+        display: none !important;
+    }
+    input[type="date"] {
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-moz-calendar-picker-indicator,
+    input[type="date"]::-ms-clear {
+        display: none !important;
+    }
+    .invoice-header, .billing-details, .invoice-items, .subtotal, .terms_sign {
+        page-break-inside: avoid !important;
+    }
+}
+
+/* Ensure table borders print clearly */
+@media print {
+    body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .invoice-items table,
+    .invoice-items table th,
+    .invoice-items table td,
+    .subtotal table,
+    .subtotal table th,
+    .subtotal table td {
+        border: 1px solid #000 !important;
+        border-color: #000 !important;
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+    .invoice-items table {
+        border-collapse: collapse !important;
+    }
+    .invoice-items table th,
+    .invoice-items table td,
+    .subtotal table th,
+    .subtotal table td {
+        padding: 3px 4px !important;
+        border-width: 1px !important;
+    }
+}
+
+/* Header Section */
+#logo {
+    color: #4CAF50;
+    text-align: center;
+    font-size: 1.4rem;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 8px 0;
+    border-bottom: 1px solid #bbb;
+    font-size: 1rem;
+}
+
+.invoice-no,
+.invoice-date {
+    display: flex;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.billing-details {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 8px 0;
+    font-size: 1rem;
+}
+
+.billed-by,
+.billed-to {
+    width: 100%;
+    max-width: 46%;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    border: 1px solid #999;
+    border-radius: 4px;
+    background: #f7f7f7;
+    margin-bottom: 4px;
+}
+
+.billed-to h3{
+    margin-bottom: 6px;
+    text-align: left;
+    font-size: 1.05rem;
+    font-weight: bold;
+}
+
+.billed-to input{
+    width: 100%;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+    background-color: transparent;
+    font-size: 1rem;
+    padding: 2px 4px;
+    margin-bottom: 2px;
+    border: none;
+    line-height: 1.4;
+}
+
+.billed-to {
+    text-align: left;
+    background-color: #f7f7f7;
+}
+
+@media print {
+    .billing-details {
+        flex-direction: row;
+    }
+    .billed-to,
+    .billed-by {
+        max-width: 46% !important;
+        font-size: 1.05rem !important;
+        padding: 3px 4px !important;
+        margin-bottom: 1px !important;
+    }
+    .billed-to input {
+        font-size: 1.05rem !important;
+        padding: 3px 4px !important;
+        margin-bottom: 1px !important;
+    }
+}
+
+
+/* Invoice Items Section */
+.invoice-items {
+    padding: 0;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.invoice-items table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.1rem;
+    border: 1px solid #222;
+}
+
+.invoice-items table th,
+.invoice-items table td {
+    border: 1px solid #999;
+    padding: 3px 4px;
+    text-align: center;
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+.invoice-items table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    border: 1px solid #222;
+}
+
+/* Subtotal Section */
+.subtotal {
+    display: flex;
+    max-width: 100%;
+    flex-wrap: nowrap;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+/* Product summary tables: use softer borders and balanced spacing */
+.subtotal table{
+    width: 33.33%;
+    border: 1px solid #999;
+    padding-right: 6px;
+    padding-left: 6px;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+    border-radius: 0;
+}
+
+.subtotal table th,
+.subtotal table td {
+    font-size: 0.95rem;
+    padding: 3px 4px;
+    border: 1px solid #999;
+    line-height: 1.3;
+}
+
+.subtotal table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+.bank-details {
+    width: 22%;
+    border: 1px solid #999;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    text-align: left;
+    font-size: 0.95rem;
+    position: relative;
+    border-right: none;
+    border-radius: 0;
+}
+
+.bank-details h5 {
+    margin-bottom: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.bank-details p {
+    margin: 3px 0;
+    line-height: 1.4;
+}
+
+.qr {
+    width: 22%;
+    border: 1px solid #999;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 0.95rem;
+    position: relative;
+    border-left: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+}
+
+.qr-code {
+    width: 90px;
+    height: 90px;
+    box-sizing: border-box;
+}
+
+.subtotalcalculation{
+    width: 22%;
+    border: 1px solid #999;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+    border-radius: 0;
+}
+
+.ack,
+.subtotalcalculation {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 0.95rem;
+}
+
+.subtotalcalculation ul {
+    list-style-type: none;
+    font-family: Arial, sans-serif;
+    font-size: 0.95rem;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.list1 {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.list1 li {
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2px;
+    line-height: 1.3;
+}
+
+.list2 {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.list2 li {
+    margin-bottom: 2px;
+    line-height: 1.3;
+}
+
+/* Terms and Conditions */
+.terms_sign {
+    display: flex;
+    border: 1px solid #222;
+    border-radius: 0;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.terms-conditions {
+    width: 50%;
+    border-right: 1px solid #222;
+    padding: 8px 10px;
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.terms-conditions h3 {
+    margin-bottom: 6px;
+    font-size: 1.05rem;
+    font-weight: bold;
+}
+
+.terms-conditions h6 {
+    font-size: 1rem;
+    font-weight: normal;
+    line-height: 1.5;
+}
+
+.terms-conditions p {
+    margin: 2px 0;
+}
+
+.authorized_sign {
+    width: 50%;
+    border-left: 1px solid #222;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    font-size: 1rem;
+    padding: 8px 10px;
+}
+
+.authorized_sign h5 {
+    font-size: 1rem;
+}
+
+/* Buttons */
+#generatePDF,
+#addRow {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+#generatePDF:hover,
+#addRow:hover {
+    background-color: #45a049;
+}
+
+#addRow {
+    padding: 2px;
+    border-color: white;
+}
+
+#grandTotal {
+    width: 95%;
+    font-size: 1.15rem;
+    font-weight: bold;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .main-wrapper {
+        flex-direction: column;
+        min-height: unset;
+        width: 100vw;
+        border-radius: 8px;
+        border: 2px solid #222;
+        box-shadow: none;
+    }
+    .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 8px 8px 0 0 !important;
+        border-right: none !important;
+        border-bottom: 1px solid #222 !important;
+        min-height: auto !important;
+        height: auto !important;
+        box-sizing: border-box;
+        padding: 10px 4px 10px 4px !important;
+        font-size: 0.95rem !important;
+        overflow-x: auto;
+        display: block !important;
+        flex: none !important;
+    }
+    .invoice-items table, .subtotal table {
+        font-size: 0.8rem !important;
+        min-width: 600px;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+    }
+    .container > * {
+        margin-bottom: 10px !important;
+        min-width: 0 !important;
+    }
+    .invoice-header, .billing-details, .invoice-items, .subtotal, .terms_sign {
+        flex-direction: column !important;
+        width: 100% !important;
+        padding: 2px 0 !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+    .billed-by, .billed-to {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin-bottom: 4px !important;
+    }
+    .invoice-items table, .subtotal table {
+        font-size: 0.8rem !important;
+        min-width: 600px;
+    }
+    .invoice-items table th, .invoice-items table td, .subtotal table th, .subtotal table td {
+        font-size: 0.8rem !important;
+        padding: 1px 2px !important;
+        word-break: break-word;
+    }
+    .terms-conditions, .authorized_sign {
+        width: 100% !important;
+        font-size: 0.8rem !important;
+        border: none !important;
+        padding: 2px 0 !important;
+        margin-bottom: 2px !important;
+    }
+    .subtotal {
+        flex-wrap: wrap;
+    }
+    .subtotal table,
+    .ack,
+    .subtotalcalculation {
+        width: 100%;
+    }
+    footer {
+        font-size: 0.8rem !important;
+        padding: 2px 0 !important;
+    }
+}
+
+/* Print Styles */
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+    .container, .container * {
+        visibility: visible !important;
+    }
+
+    #addRow,
+    #generatePDF {
+        display: none;
+    }
+
+    input[type="date"] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-moz-calendar-picker-indicator,
+    input[type="date"]::-ms-clear {
+        display: none;
+    }
+}
+
+#subtable tbody input{
+    width: 95%;
+    font-size: 1.1rem;
+}
+
+footer {
+    background-color: #0f1111;
+    color: white;
+    text-align: center;
+    font-size: 1rem;
+    padding: 4px 0;
+    border-radius: 0 0 8px 8px;
+    line-height: 1.4;
+}
+
+.common {
+    margin: 0;
+    width: 95%;
+    font-size: 1.1rem;
+    padding: 2px 3px;
+    border: none;
+    background: transparent;
+    line-height: 1.3;
+}
+
+td input {
+    font-size: 1.1rem;
+    padding: 2px 3px;
+    border: none;
+    background: transparent;
+}
+
+/* Additional Styles */
+.rate {
+    width: 95%;
+    padding: 0;
+    font-size: 1.1rem;
+}
+
+/* Invoice table inputs: fill cell, no inner borders, darker text */
+#itemsTable td,
+#itemsTable th {
+    color: #0f1111;
+}
+
+#itemsTable input,
+.invoice-header input {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    display: block;
+    box-sizing: border-box;
+    padding: 2px 3px;
+    margin: 0;
+    color: #0f1111;
+    font-size: 1.1rem;
+    line-height: 1.3;
+}
+
+/* Ensure placeholders are subtle */
+#itemsTable input::placeholder,
+.invoice-header input::placeholder {
+    color: #999;
+}
+
+/* Print: keep inputs borderless and flush */
+@media print {
+    #itemsTable input,
+    .invoice-header input {
+        border: none !important;
+        outline: none !important;
+        background: transparent !important;
+        width: 100% !important;
+        height: 100% !important;
+        display: block !important;
+        padding: 2px 3px !important;
+        margin: 0 !important;
+        color: #000 !important;
+        font-size: 1.1rem !important;
+    }
+}
+
+/* Print override: keep product summary visually lighter than main invoice */
+@media print {
+    #itemsTable input,
+    #subtable input {
+        font-size: 1.2rem !important;
+    }
+    .subtotal,
+    .subtotal table,
+    .subtotal table th,
+    .subtotal table td,
+    .subtotalcalculation,
+    .bank-details,
+    .qr {
+        border: 1px solid #666 !important;
+        border-color: #666 !important;
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+    .subtotal table th,
+    .subtotal table td {
+        padding: 3px 6px !important;
+        border-width: 1px !important;
+        font-size: 1rem !important;
+    }
+    
+    .bank-details,
+    .qr,
+    .subtotalcalculation {
+        font-size: 1rem !important;
+        padding: 8px 10px !important;
+    }
+    
+    .subtotalcalculation ul {
+        font-size: 1rem !important;
+    }
+    
+    .subtotal {
+        box-shadow: none !important;
+    }
+}

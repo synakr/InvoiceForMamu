@@ -1,8 +1,11 @@
-* {
+/* @import "tailwindcss"; */
+
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
+} */
+
 
 html,
 body {
@@ -361,51 +364,44 @@ button:hover {
   margin-bottom: 6px;
 }
 
-/* BANK + QR */
+/* BANK + TERMS + QR + SIGNATURE */
 
 .bottom-section {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 4px;
-  margin-top: 4px;
+  grid-template-columns: 2.2fr 1.5fr 0.9fr 1.2fr;
+  gap: 3px;
+  margin-top: 3px;
   width: 100%;
 }
 
+.terms-box,
+.bank-details,
+.qr-section,
 .signature-section {
   border: 1px solid #999;
-  background: white;
-  padding: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  min-height: 110px;
+  background: #fff;
+  padding: 5px 6px;
+  font-size: 10px;
+  overflow: hidden;
 }
 
-.signature-content {
-  text-align: center;
-  width: 100%;
+.terms-box {
+  line-height: 1.25;
 }
 
+.terms-box h4,
+.bank-details h4,
 .signature-content h4 {
-  font-size: 12px;
-  font-weight: bold;
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
-.bank-details,
-.qr-section {
-  border: 1px solid #999;
-  background: transparent;
-  padding: 8px;
-  font-size: 12px;
-}
-
-.bank-details h4 {
-  margin-bottom: 6px;
-}
-
+.terms-box p,
 .bank-details p {
-  margin-bottom: 3px;
-  line-height: 1.35;
+  margin: 2px 0;
+  line-height: 1.2;
 }
 
 .qr-section {
@@ -415,16 +411,25 @@ button:hover {
 }
 
 .qr-image {
-  width: 100px;
-  height: 100px;
+  width: 75px;
+  height: 75px;
   object-fit: contain;
 }
 
-.grand-total {
-  font-weight: bold;
-  font-size: 14px;
-  border-top: 1px solid #ccc;
-  padding-top: 6px;
+.signature-section {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  min-height: 85px;
+}
+
+.signature-content {
+  text-align: center;
+  width: 100%;
+}
+
+.signature-content h4 {
+  margin-bottom: 0;
 }
 
 /* TRANSACTION SUMMARY */
@@ -519,7 +524,6 @@ button:hover {
     flex-direction: row !important;
     width: 100% !important;
     min-height: 100vh !important;
-
     border: 1.5px solid #000 !important;
     padding: 4px !important;
     box-sizing: border-box !important;
@@ -534,7 +538,6 @@ button:hover {
 
   .with-watermark::before {
     opacity: 0.06 !important;
-
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
@@ -544,10 +547,8 @@ button:hover {
     width: 17% !important;
     min-width: 17% !important;
     flex: 0 0 17% !important;
-
-    border-left: 1px solid black !important;
+    border-left: 1px solid #000 !important;
     padding: 4px !important;
-
     font-size: 10px !important;
     line-height: 1.25 !important;
   }
@@ -556,7 +557,7 @@ button:hover {
     display: none !important;
   }
 
-  .print-toggle {
+  .print-toolbar {
     display: none !important;
   }
 
@@ -585,32 +586,64 @@ button:hover {
     margin-top: 4px !important;
   }
 
-  .billing-details {
-    display: flex !important;
-    flex-direction: row !important;
-    gap: 4px !important;
-  }
+.billing-details {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 4px !important;
+  align-items: stretch !important;
+}
 
-  .billed-by,
-  .billed-to {
-    width: 50% !important;
-    max-width: 50% !important;
-    flex: 0 0 50% !important;
-  }
-
-  .print-toolbar {
-    display: none !important;
-  }
+.billed-by,
+.billed-to {
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+}
 
   .summary-row {
     grid-template-columns: 1fr 1fr !important;
     gap: 2px !important;
   }
 
+  /* ===== Bottom section ===== */
+
   .bottom-section {
-    grid-template-columns: 1fr 1fr 1fr !important;
+    grid-template-columns: 2fr 1.4fr 0.8fr 1fr !important;
     gap: 2px !important;
   }
+
+  .terms-box,
+  .bank-details,
+  .qr-section,
+  .signature-section {
+    font-size: 9px !important;
+    padding: 4px !important;
+    border-color: #000 !important;
+  }
+
+  .terms-box h4,
+  .bank-details h4,
+  .signature-content h4 {
+    font-size: 10px !important;
+    margin-bottom: 3px !important;
+  }
+
+  .terms-box p,
+  .bank-details p {
+    margin: 1px 0 !important;
+    line-height: 1.15 !important;
+  }
+
+  .signature-section {
+    min-height: 72px !important;
+  }
+
+  .qr-image {
+    width: 65px !important;
+    height: 65px !important;
+  }
+
+  /* ===== Tables ===== */
 
   #itemsTable {
     min-width: 100% !important;
@@ -622,13 +655,14 @@ button:hover {
   .gst-summary table,
   .gst-summary th,
   .gst-summary td,
+  .terms-box,
   .bank-details,
   .qr-section,
   .totals-panel,
   .signature-section,
   .billed-by,
   .billed-to {
-    border-color: black !important;
+    border-color: #000 !important;
   }
 
   #itemsTable th,
@@ -637,18 +671,6 @@ button:hover {
   .gst-summary td {
     font-size: 11px !important;
     padding: 2px 3px !important;
-  }
-
-  .bank-details,
-  .qr-section,
-  .totals-panel,
-  .signature-section {
-    font-size: 11px !important;
-  }
-
-  .qr-image {
-    width: 80px !important;
-    height: 80px !important;
   }
 
   .invoice-header,

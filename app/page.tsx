@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import "./invoice.css"
 
 type InvoiceItem = {
   product: string;
@@ -11,6 +12,8 @@ type InvoiceItem = {
   quantity: number;
   free: string;
   mrp: string;
+  ptr: number;
+  pts: number;
   rate: number;
   discount: number;
   gst: number;
@@ -28,6 +31,9 @@ const [includeWatermark, setIncludeWatermark] =
 const [invoiceDate, setInvoiceDate] = useState(
   new Date().toISOString().split("T")[0]
 );
+
+const [showPTR, setShowPTR] = useState(true);
+const [showPTS, setShowPTS] = useState(true);
 
 const [customer, setCustomer] = useState({
   customerName: "",
@@ -59,17 +65,15 @@ const [items, setItems] = useState<InvoiceItem[]>([
     quantity: 1,
     free: "",
     mrp: "",
+    ptr: 0,
+    pts: 0,
     rate: 1,
     discount: 0,
     gst: 18,
   },
 ]);
 
-
-
 const router = useRouter();
-
-
 
 useEffect(() => {
   const stored = localStorage.getItem(
@@ -138,6 +142,8 @@ const addRow = () => {
       quantity: 1,
       free: "",
       mrp: "",
+      ptr: 0,
+      pts: 0,
       rate: 1,
       discount: 0,
       gst: 18,
@@ -377,6 +383,10 @@ items.forEach((item) => {
                 <th>Qty</th>
                 <th>Free</th>
                 <th>MRP</th>
+
+                {showPTR && <th>PTR</th>}
+                {showPTS && <th>PTS</th>}
+
                 <th>Rate</th>
                 <th>Dis%</th>
                 <th>Amount</th>
@@ -490,6 +500,38 @@ items.forEach((item) => {
                       />
                     </td>
 
+                    {showPTR && (
+                      <td>
+                        <input
+                          type="number"
+                          value={item.ptr}
+                          onChange={(e) =>
+                            updateItem(
+                              index,
+                              "ptr",
+                              Number(e.target.value)
+                            )
+                          }
+                        />
+                      </td>
+                    )}
+
+                    {showPTS && (
+                      <td>
+                        <input
+                          type="number"
+                          value={item.pts}
+                          onChange={(e) =>
+                            updateItem(
+                              index,
+                              "pts",
+                              Number(e.target.value)
+                            )
+                          }
+                        />
+                      </td>
+                    )}
+
                     <td>
                       <input
                         type="number"
@@ -561,11 +603,15 @@ items.forEach((item) => {
             <tfoot>
               <tr>
                 <td
-                  colSpan={14}
+                  colSpan={
+                    14 +
+                    (showPTR ? 1 : 0) +
+                    (showPTS ? 1 : 0)
+                  }
                   style={{
                     textAlign: "right",
                   }}
-                >
+                >                  
                   Grand Total
                 </td>
 
@@ -633,6 +679,30 @@ items.forEach((item) => {
           <span>
             Include Watermark
           </span>
+        </label>
+
+        <label className="summary-toggle">
+          <input
+            type="checkbox"
+            checked={showPTR}
+            onChange={(e) =>
+              setShowPTR(e.target.checked)
+            }
+          />
+
+          <span>Show PTR</span>
+        </label>
+
+        <label className="summary-toggle">
+          <input
+            type="checkbox"
+            checked={showPTS}
+            onChange={(e) =>
+              setShowPTS(e.target.checked)
+            }
+          />
+
+          <span>Show PTS</span>
         </label>
       </div>
 
@@ -750,27 +820,39 @@ items.forEach((item) => {
         </div>
 
         <div className="bottom-section">
+          <div className="terms-box">
+            <h4>Terms & Conditions</h4>
+
+            <p>
+              GOODS ONCE SOLD WILL NOT BE TAKEN BACK OR EXCHANGED.
+            </p>
+
+            <p>
+              ALL DISPUTES ARE SUBJECTED TO JURISDICTION ONLY.
+            </p>
+
+            <p>
+              BILLS NOT PAID BY DUE DATE WILL ATTRACT 24% INTEREST.
+            </p>
+          </div>
+
           <div className="bank-details">
             <h4>Bank Details</h4>
 
             <p>
-              <strong>Name:</strong>{" "}
-              AL HIRAJ DISTRIBUTOR
+              <strong>Name:</strong> AL HIRAJ DISTRIBUTOR
             </p>
 
             <p>
-              <strong>Bank:</strong>{" "}
-              Bank of Baroda
+              <strong>Bank:</strong> Bank of Baroda
             </p>
 
             <p>
-              <strong>Account:</strong>{" "}
-              97510000203176
+              <strong>Account:</strong> 97510000203176
             </p>
 
             <p>
-              <strong>IFSC:</strong>{" "}
-              BARB0VJCHIK
+              <strong>IFSC:</strong> BARB0VJCHIK
             </p>
           </div>
 

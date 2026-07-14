@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import "./invoice.css"
 
 type InvoiceItem = {
   product: string;
@@ -12,30 +11,32 @@ type InvoiceItem = {
   quantity: number;
   free: string;
   mrp: string;
-  ptr: number;
-  pts: number;
   rate: number;
   discount: number;
   gst: number;
 };
 
-export default function Home() {
-  const [invoiceNo, setInvoiceNo] = useState("");
+type Customer = {
+  customerName: string;
+  address: string;
+  city: string;
+  state: string;
+  pin: string;
+  phone: string;
+  dlNo: string;
+  gstin: string;
+};
 
-const [includeSummary, setIncludeSummary] =
-  useState(true);
+export default function InvoiceForm() {
+const router = useRouter();
 
-const [includeWatermark, setIncludeWatermark] =
-  useState(true);
+const [invoiceNo, setInvoiceNo] = useState("");
 
 const [invoiceDate, setInvoiceDate] = useState(
   new Date().toISOString().split("T")[0]
 );
 
-const [showPTR, setShowPTR] = useState(true);
-const [showPTS, setShowPTS] = useState(true);
-
-const [customer, setCustomer] = useState({
+const [customer, setCustomer] = useState<Customer>({
   customerName: "",
   address: "",
   city: "",
@@ -47,847 +48,634 @@ const [customer, setCustomer] = useState({
 });
 
 const updateCustomer = (
-  field: keyof typeof customer,
+  field: keyof Customer,
   value: string
 ) => {
-  setCustomer((prev) => ({
+  const updated = {
+    ...customer,
+    [field]: value,
+  };
+
+  if (field === "customerName") {
+    const match = savedCustomers.find(
+      (c) =>
+        c.customerName.toLowerCase() ===
+        value.toLowerCase()
+    );
+
+    setCustomer(match ?? updated);
+    return;
+  }
+
+  setCustomer(updated);
+};
+
+const [includeSummary, setIncludeSummary] =
+  useState(true);
+
+const [includeWatermark, setIncludeWatermark] =
+  useState(true);
+
+const [showPTR, setShowPTR] = useState(true);
+
+const [showPTS, setShowPTS] = useState(true);
+
+const emptyItem = (): InvoiceItem => ({
+  product: "",
+  hsn: "",
+  batchNo: "",
+  expiry: "",
+  quantity: 1,
+  free: "",
+  mrp: "",
+  rate: 1,
+  discount: 0,
+  gst: 18,
+});
+
+const [currentItem, setCurrentItem] =
+  useState<InvoiceItem>(emptyItem());
+
+const [items, setItems] = useState<InvoiceItem[]>([]);
+
+const updateItem = (
+  field: keyof InvoiceItem,
+  value: string | number
+) => {
+  setCurrentItem((prev) => ({
     ...prev,
     [field]: value,
   }));
 };
 
-const [items, setItems] = useState<InvoiceItem[]>([
-  {
-    product: "",
-    hsn: "",
-    batchNo: "",
-    expiry: "",
-    quantity: 1,
-    free: "",
-    mrp: "",
-    ptr: 0,
-    pts: 0,
-    rate: 1,
-    discount: 0,
-    gst: 18,
-  },
-]);
+const addProduct = () => {
+  if (!currentItem.product.trim()) return;
 
-const router = useRouter();
+  setItems((prev) => [...prev, currentItem]);
 
-useEffect(() => {
-  const stored = localStorage.getItem(
-    "invoice-data"
+  setCurrentItem({
+    ...emptyItem(),
+    gst: currentItem.gst,
+    hsn: currentItem.hsn,
+  });
+};
+
+const removeProduct = (index: number) => {
+  setItems((prev) =>
+    prev.filter((_, i) => i !== index)
+  );
+};
+
+const sectionCardClass =
+  "rounded-3xl border border-slate-200/80 bg-white/95 shadow-[0_10px_30px_rgba(15,23,42,0.06)] backdrop-blur-sm";
+
+const inputClass =
+  "h-11 rounded-xl border border-slate-300 bg-slate-50 px-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 hover:border-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-100";
+
+const labelClass =
+  "text-xs font-medium uppercase tracking-[0.12em] text-slate-600";
+
+const generateInvoice = () => {
+  localStorage.setItem(
+    "invoice-data",
+    JSON.stringify({
+      invoiceNo,
+      invoiceDate,
+
+      includeSummary,
+      includeWatermark,
+      showPTR,
+      showPTS,
+
+      customer,
+
+      items,
+    })
   );
 
-  if (!stored) return;
+  const customers = JSON.parse(
+    localStorage.getItem("customers") ?? "[]"
+  );
 
-  try {
-    const data = JSON.parse(stored);
+  const exists = customers.some(
+    (c: Customer) =>
+      c.customerName.toLowerCase() ===
+      customer.customerName.toLowerCase()
+  );
 
-    setInvoiceNo(data.invoiceNo || "");
-
-    setInvoiceDate(
-      data.invoiceDate ||
-        new Date()
-          .toISOString()
-          .split("T")[0]
+  if (!exists && customer.customerName.trim()) {
+    customers.push(customer);
+    localStorage.setItem(
+      "customers",
+      JSON.stringify(customers)
     );
+    setSavedCustomers(customers);
+  }
 
-    if (data.customer) {
-      setCustomer(data.customer);
-    }
+  router.push("/invoice");
+};
 
-    if (
-      Array.isArray(data.items) &&
-      data.items.length > 0
-    ) {
-      setItems(data.items);
-    }
+const [savedCustomers, setSavedCustomers] = useState<Customer[]>([]);
 
-    localStorage.removeItem(
-      "invoice-data"
-    );
-  } catch (err) {
-    console.error(
-      "Failed to load invoice",
-      err
-    );
+useEffect(() => {
+  const stored = localStorage.getItem("customers");
+
+  if (stored) {
+    setSavedCustomers(JSON.parse(stored));
   }
 }, []);
 
-const updateItem = (
-  index: number,
-  field: keyof InvoiceItem,
-  value: string | number
-) => {
-  const updated = [...items];
-
-  updated[index] = {
-    ...updated[index],
-    [field]: value,
+const [installPrompt, setInstallPrompt] = useState<any>(null);
+useEffect(() => {
+  const handler = (e: any) => {
+    e.preventDefault();
+    setInstallPrompt(e);
   };
 
-  setItems(updated);
-};
+  window.addEventListener(
+    "beforeinstallprompt",
+    handler
+  );
 
-const addRow = () => {
-  setItems([
-    ...items,
-    {
-      product: "",
-      hsn: "",
-      batchNo: "",
-      expiry: "",
-      quantity: 1,
-      free: "",
-      mrp: "",
-      ptr: 0,
-      pts: 0,
-      rate: 1,
-      discount: 0,
-      gst: 18,
-    },
-  ]);
-};
-
-const calculateRow = (
-  item: InvoiceItem
-) => {
-  const amount =
-    item.quantity * item.rate;
-
-  const cgst =
-    (item.gst / 2 / 100) * amount;
-
-  const sgst =
-    (item.gst / 2 / 100) * amount;
-
-  const totalBeforeDiscount =
-    amount + cgst + sgst;
-
-  const discountAmount =
-    (item.discount / 100) *
-    totalBeforeDiscount;
-
-  const total =
-    totalBeforeDiscount -
-    discountAmount;
-
-  return {
-    amount,
-    sgst,
-    cgst,
-    total,
+  return () => {
+    window.removeEventListener(
+      "beforeinstallprompt",
+      handler
+    );
   };
-};
+}, []);
 
-const grandTotal = items.reduce(
-  (sum, item) =>
-    sum + calculateRow(item).total,
-  0
-);
+const installApp = async () => {
+  if (!installPrompt) return;
 
-const gstSummary = {
-  5: { amount: 0, sgst: 0, cgst: 0 },
-  12: { amount: 0, sgst: 0, cgst: 0 },
-  18: { amount: 0, sgst: 0, cgst: 0 },
-  28: { amount: 0, sgst: 0, cgst: 0 },
-};
+  installPrompt.prompt();
 
-items.forEach((item) => {
-  const row = calculateRow(item);
+  const { outcome } =
+    await installPrompt.userChoice;
 
-  const gst = item.gst as
-    | 5
-    | 12
-    | 18
-    | 28;
-
-  if (gstSummary[gst]) {
-    gstSummary[gst].amount +=
-      row.amount;
-
-    gstSummary[gst].sgst +=
-      row.sgst;
-
-    gstSummary[gst].cgst +=
-      row.cgst;
+  if (outcome === "accepted") {
+    console.log("PWA installed");
   }
-});
+
+  setInstallPrompt(null);
+};
+
+useEffect(() => {
+  const handler = () => {
+    setInstallPrompt(null);
+  };
+
+  window.addEventListener(
+    "appinstalled",
+    handler
+  );
+
+  return () => {
+    window.removeEventListener(
+      "appinstalled",
+      handler
+    );
+  };
+}, []);
 
   return (
-    <div
-      className={`main-wrapper ${
-        includeSummary
-          ? ""
-          : "no-summary"
-      }`}
-    >
-      <div
-        className={`container ${
-          includeWatermark
-            ? "with-watermark"
-            : ""
-        }`}
-      >
-        <div id="logo">
-          <b>GST INVOICE</b>
-        </div>
-
-        <div id="logo">
-          <b>CREDIT</b>
-        </div>
-
-        <div className="invoice-header">
-          <div className="invoice-no">
-            <label>Invoice No:</label>
-
-            <input
-              type="text"
-              value={invoiceNo}
-              onChange={(e) =>
-                setInvoiceNo(e.target.value)
-              }
-            />
-          </div>
-
-          <div className="invoice-date">
-            <label>Invoice Date:</label>
-
-            <input
-              type="date"
-              value={invoiceDate}
-              onChange={(e) =>
-                setInvoiceDate(e.target.value)
-              }
-            />
+    <div className="min-h-screen">
+      <div className="mx-auto max-w-7xl p-10 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
+        <div className="mb-6 rounded-3xl border border-slate-200/80 bg-white/95 p-10 shadow-[0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:px-6 sm:py-6 lg:px-7">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700">
+                Invoice Builder
+              </p>
+              <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+                Invoice Entry
+              </h1>
+            </div>
           </div>
         </div>
 
-        <div className="billing-details">
-          <div className="billed-by">
-            <h3>BILLED BY</h3>
+        <div className="space-y-6 lg:space-y-8">
+          <section className={`${sectionCardClass} p-5 sm:p-6 lg:p-7`}>
+            <div className="mb-5 flex items-start justify-between gap-3 border-b border-slate-100 pb-4">
+              <div>
+                <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-700">
+                  Invoice Details
+                </h2>
+                <p className="mt-1 text-sm text-slate-500">Header information for this bill.</p>
+              </div>
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-500">
+                Header
+              </span>
+            </div>
 
-            <p>
-              <strong>
-                AL HIRAJ DISTRIBUTOR
-              </strong>
-            </p>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="flex min-w-0 flex-col gap-2">
+                <label className={labelClass}>Invoice No</label>
+                <input
+                  placeholder="Invoice No"
+                  value={invoiceNo}
+                  onChange={(e) => setInvoiceNo(e.target.value)}
+                  className={inputClass}
+                />
+              </div>
 
-            <p>
-              Address: 16, Next to Masjid
-              Al-Jabbar, Medarahalli
-            </p>
+              <div className="flex min-w-0 flex-col gap-2">
+                <label className={labelClass}>Invoice Date</label>
+                <input
+                  type="date"
+                  value={invoiceDate}
+                  onChange={(e) => setInvoiceDate(e.target.value)}
+                  className={inputClass}
+                />
+              </div>
+            </div>
+          </section>
 
-            <p>Bangalore - 560090</p>
+          <section className={`${sectionCardClass} p-5 sm:p-6 lg:p-7`}>
+            <div className="mb-5 flex items-start justify-between gap-3 border-b border-slate-100 pb-4">
+              <div>
+                <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-700">
+                  Customer Details
+                </h2>
+                <p className="mt-1 text-sm text-slate-500">Keep the party details readable and separated.</p>
+              </div>
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-500">
+                Party
+              </span>
+            </div>
 
-            <p>GSTIN: 29GBHPS2824E1ZE</p>
-          </div>
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="flex min-w-0 flex-col gap-2 lg:col-span-1">
+                  <label className={labelClass}>Customer Name</label>
+                  <input
+                    list="customer-list"
+                    placeholder="Customer Name"
+                    value={customer.customerName}
+                    onChange={(e) =>
+                      updateCustomer(
+                        "customerName",
+                        e.target.value
+                      )
+                    }
+                    className={inputClass}
+                  />
+                </div>
 
-          <div className="billed-to">
-            <h3>BILLED TO</h3>
+                <div className="flex min-w-0 flex-col gap-2 lg:col-span-2">
+                  <label className={labelClass}>Address</label>
+                  <input
+                    placeholder="Address"
+                    value={customer.address}
+                    onChange={(e) =>
+                      updateCustomer(
+                        "address",
+                        e.target.value
+                      )
+                    }
+                    className={inputClass}
+                  />
+                </div>
+              </div>
 
-            <div>Customer Name:
-<input
-  value={customer.customerName}
-  onChange={(e) =>
-    updateCustomer(
-      "customerName",
-      e.target.value
-    )
-  }
-/></div>
-            <div>Address:
-<input
-  value={customer.address}
-  onChange={(e) =>
-    updateCustomer(
-      "address",
-      e.target.value
-    )
-  }
-/></div>
-            <div>City:
-<input
-  value={customer.city}
-  onChange={(e) =>
-    updateCustomer(
-      "city",
-      e.target.value
-    )
-  }
-/></div>
-            <div>State:
-<input
-  value={customer.state}
-  onChange={(e) =>
-    updateCustomer(
-      "state",
-      e.target.value
-    )
-  }
-/></div>
-            <div>PIN:
-<input
-  value={customer.pin}
-  onChange={(e) =>
-    updateCustomer(
-      "pin",
-      e.target.value
-    )
-  }
-/></div>
-            <div>Phone:
-<input
-  value={customer.phone}
-  onChange={(e) =>
-    updateCustomer(
-      "phone",
-      e.target.value
-    )
-  }
-/></div>
-            <div>D.L No:
-<input
-  value={customer.dlNo}
-  onChange={(e) =>
-    updateCustomer(
-      "dlNo",
-      e.target.value
-    )
-  }
-/></div>
-            <div>GSTIN:
-<input
-  value={customer.gstin}
-  onChange={(e) =>
-    updateCustomer(
-      "gstin",
-      e.target.value
-    )
-  }
-/></div>
-          </div>
-        </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="flex min-w-0 flex-col gap-2">
+                  <label className={labelClass}>City</label>
+                  <input
+                    placeholder="City"
+                    value={customer.city}
+                    onChange={(e) =>
+                      updateCustomer("city", e.target.value)
+                    }
+                    className={inputClass}
+                  />
+                </div>
 
-        <div className="invoice-items">
-          <table id="itemsTable">
-            <thead>
-              <tr>
-                <th>Sl No.</th>
-                <th>Product</th>
-                <th>HSN</th>
-                <th>Batch</th>
-                <th>Expiry</th>
-                <th>Qty</th>
-                <th>Free</th>
-                <th>MRP</th>
+                <div className="flex min-w-0 flex-col gap-2">
+                  <label className={labelClass}>State</label>
+                  <input
+                    placeholder="State"
+                    value={customer.state}
+                    onChange={(e) =>
+                      updateCustomer("state", e.target.value)
+                    }
+                    className={inputClass}
+                  />
+                </div>
 
-                {showPTR && <th>PTR</th>}
-                {showPTS && <th>PTS</th>}
+                <div className="flex min-w-0 flex-col gap-2">
+                  <label className={labelClass}>PIN</label>
+                  <input
+                    placeholder="PIN"
+                    value={customer.pin}
+                    onChange={(e) =>
+                      updateCustomer("pin", e.target.value)
+                    }
+                    className={inputClass}
+                  />
+                </div>
 
-                <th>Rate</th>
-                <th>Dis%</th>
-                <th>Amount</th>
-                <th>GST</th>
-                <th>SGST</th>
-                <th>CGST</th>
-                <th>Total</th>
-              </tr>
-            </thead>
+                <div className="flex min-w-0 flex-col gap-2">
+                  <label className={labelClass}>Phone</label>
+                  <input
+                    placeholder="Phone"
+                    value={customer.phone}
+                    onChange={(e) =>
+                      updateCustomer("phone", e.target.value)
+                    }
+                    className={inputClass}
+                  />
+                </div>
+              </div>
 
-            <tbody>
-              {items.map((item, index) => {
-                const row =
-                  calculateRow(item);
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="flex min-w-0 flex-col gap-2 lg:col-span-1">
+                  <label className={labelClass}>DL No.</label>
+                  <input
+                    placeholder="DL No"
+                    value={customer.dlNo}
+                    onChange={(e) =>
+                      updateCustomer("dlNo", e.target.value)
+                    }
+                    className={inputClass}
+                  />
+                </div>
 
-                return (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
+                <div className="flex min-w-0 flex-col gap-2 lg:col-span-2">
+                  <label className={labelClass}>GSTIN</label>
+                  <input
+                    placeholder="GSTIN"
+                    value={customer.gstin}
+                    onChange={(e) =>
+                      updateCustomer("gstin", e.target.value)
+                    }
+                    className={inputClass}
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
 
-                    <td>
-                      <input
-                        value={item.product}
-                        onChange={(e) =>
-                          updateItem(
-                            index,
-                            "product",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </td>
+          <section className={`${sectionCardClass} p-5 sm:p-6 lg:p-7`}>
+            <div className="mb-5 flex items-start justify-between gap-3 border-b border-slate-100 pb-4">
+              <div>
+                <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-700">
+                  Add Product
+                </h2>
+                <p className="mt-1 text-sm text-slate-500">Split the line item inputs into clearer rows.</p>
+              </div>
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-500">
+                Line item
+              </span>
+            </div>
 
-                    <td>
-                      <input
-                        value={item.hsn}
-                        onChange={(e) =>
-                          updateItem(
-                            index,
-                            "hsn",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </td>
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12">
+                <div className="flex min-w-0 flex-col gap-2 lg:col-span-5">
+                  <label className={labelClass}>Product</label>
+                  <input
+                    value={currentItem.product}
+                    onChange={(e) => updateItem("product", e.target.value)}
+                    className={inputClass}
+                  />
+                </div>
 
-                    <td>
-                      <input
-                        value={item.batchNo}
-                        onChange={(e) =>
-                          updateItem(
-                            index,
-                            "batchNo",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </td>
+                <div className="flex min-w-0 flex-col gap-2 lg:col-span-3">
+                  <label className={labelClass}>HSN</label>
+                  <input
+                    value={currentItem.hsn}
+                    onChange={(e) => updateItem("hsn", e.target.value)}
+                    className={inputClass}
+                  />
+                </div>
 
-                    <td>
-                      <input
-                        value={item.expiry}
-                        onChange={(e) =>
-                          updateItem(
-                            index,
-                            "expiry",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </td>
+                <div className="flex min-w-0 flex-col gap-2 lg:col-span-4">
+                  <label className={labelClass}>Batch No.</label>
+                  <input
+                    value={currentItem.batchNo}
+                    onChange={(e) => updateItem("batchNo", e.target.value)}
+                    className={inputClass}
+                  />
+                </div>
+              </div>
 
-                    <td>
-                      <input
-                        type="number"
-                        value={item.quantity}
-                        onChange={(e) =>
-                          updateItem(
-                            index,
-                            "quantity",
-                            Number(
-                              e.target.value
-                            )
-                          )
-                        }
-                      />
-                    </td>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12">
+                <div className="flex min-w-0 flex-col gap-2 lg:col-span-4">
+                  <label className={labelClass}>Expiry</label>
+                  <input
+                    value={currentItem.expiry}
+                    onChange={(e) => updateItem("expiry", e.target.value)}
+                    className={inputClass}
+                  />
+                </div>
 
-                    <td>
-                      <input
-                        value={item.free}
-                        onChange={(e) =>
-                          updateItem(
-                            index,
-                            "free",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </td>
+                <div className="flex min-w-0 flex-col gap-2 lg:col-span-2">
+                  <label className={labelClass}>Qty</label>
+                  <input
+                    type="number"
+                    value={currentItem.quantity}
+                    onChange={(e) =>
+                      updateItem("quantity", Number(e.target.value))
+                    }
+                    className={inputClass}
+                  />
+                </div>
 
-                    <td>
-                      <input
-                        value={item.mrp}
-                        onChange={(e) =>
-                          updateItem(
-                            index,
-                            "mrp",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </td>
+                <div className="flex min-w-0 flex-col gap-2 lg:col-span-3">
+                  <label className={labelClass}>Free</label>
+                  <input
+                    value={currentItem.free}
+                    onChange={(e) => updateItem("free", e.target.value)}
+                    className={inputClass}
+                  />
+                </div>
 
-                    {showPTR && (
-                      <td>
-                        <input
-                          type="number"
-                          value={item.ptr}
-                          onChange={(e) =>
-                            updateItem(
-                              index,
-                              "ptr",
-                              Number(e.target.value)
-                            )
-                          }
-                        />
-                      </td>
-                    )}
+                <div className="flex min-w-0 flex-col gap-2 lg:col-span-3">
+                  <label className={labelClass}>MRP</label>
+                  <input
+                    value={currentItem.mrp}
+                    onChange={(e) => updateItem("mrp", e.target.value)}
+                    className={inputClass}
+                  />
+                </div>
+              </div>
 
-                    {showPTS && (
-                      <td>
-                        <input
-                          type="number"
-                          value={item.pts}
-                          onChange={(e) =>
-                            updateItem(
-                              index,
-                              "pts",
-                              Number(e.target.value)
-                            )
-                          }
-                        />
-                      </td>
-                    )}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12">
+                <div className="flex min-w-0 flex-col gap-2 lg:col-span-4">
+                  <label className={labelClass}>Rate</label>
+                  <input
+                    type="number"
+                    value={currentItem.rate}
+                    onChange={(e) =>
+                      updateItem("rate", Number(e.target.value))
+                    }
+                    className={inputClass}
+                  />
+                </div>
 
-                    <td>
-                      <input
-                        type="number"
-                        value={item.rate}
-                        onChange={(e) =>
-                          updateItem(
-                            index,
-                            "rate",
-                            Number(
-                              e.target.value
-                            )
-                          )
-                        }
-                      />
-                    </td>
+                <div className="flex min-w-0 flex-col gap-2 lg:col-span-4">
+                  <label className={labelClass}>Disc %</label>
+                  <input
+                    type="number"
+                    value={currentItem.discount}
+                    onChange={(e) =>
+                      updateItem("discount", Number(e.target.value))
+                    }
+                    className={inputClass}
+                  />
+                </div>
 
-                    <td>
-                      <input
-                        type="number"
-                        value={item.discount}
-                        onChange={(e) =>
-                          updateItem(
-                            index,
-                            "discount",
-                            Number(
-                              e.target.value
-                            )
-                          )
-                        }
-                      />
-                    </td>
+                <div className="flex min-w-0 flex-col gap-2 lg:col-span-4">
+                  <label className={labelClass}>GST %</label>
+                  <input
+                    type="number"
+                    value={currentItem.gst}
+                    onChange={(e) =>
+                      updateItem("gst", Number(e.target.value))
+                    }
+                    className={inputClass}
+                  />
+                </div>
+              </div>
 
-                    <td>
-                      {row.amount.toFixed(2)}
-                    </td>
+              <div className="flex justify-start sm:justify-end">
+                <button
+                  onClick={addProduct}
+                  className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 hover:shadow active:scale-[0.99]"
+                >
+                  Add Product
+                </button>
+              </div>
+            </div>
+          </section>
 
-                    <td>
-                      <input
-                        type="number"
-                        value={item.gst}
-                        onChange={(e) =>
-                          updateItem(
-                            index,
-                            "gst",
-                            Number(
-                              e.target.value
-                            )
-                          )
-                        }
-                      />
-                    </td>
+          <section className={`${sectionCardClass} p-5 sm:p-6`}>
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-700">
+              Products
+            </h2>
 
-                    <td>
-                      {row.sgst.toFixed(2)}
-                    </td>
-
-                    <td>
-                      {row.cgst.toFixed(2)}
-                    </td>
-
-                    <td>
-                      {row.total.toFixed(2)}
-                    </td>
+            <div className="overflow-x-auto rounded-xl border border-slate-200">
+              <table className="min-w-full text-sm">
+                <thead className="bg-slate-50 text-[11px] uppercase tracking-wide text-slate-500">
+                  <tr>
+                    <th className="px-4 py-3 text-left font-semibold">#</th>
+                    <th className="px-4 py-3 text-left font-semibold">Product</th>
+                    <th className="px-4 py-3 text-right font-semibold">Action</th>
                   </tr>
-                );
-              })}
-            </tbody>
+                </thead>
 
-            <tfoot>
-              <tr>
-                <td
-                  colSpan={
-                    14 +
-                    (showPTR ? 1 : 0) +
-                    (showPTS ? 1 : 0)
-                  }
-                  style={{
-                    textAlign: "right",
-                  }}
-                >                  
-                  Grand Total
-                </td>
+                <tbody>
+                  {items.length === 0 ? (
+                    <tr>
+                      <td colSpan={3} className="px-4 py-8 text-center text-slate-500">
+                        No products added.
+                      </td>
+                    </tr>
+                  ) : (
+                    items.map((item, index) => (
+                      <tr key={index} className="border-t border-slate-200">
+                        <td className="px-4 py-3">{index + 1}</td>
 
-                <td>
-                  {grandTotal.toFixed(2)}
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+                        <td className="max-w-72 truncate px-4 py-3">
+                          {item.product}
+                        </td>
 
+                        <td className="px-4 py-3 text-right">
+                          <button
+                            type="button"
+                            onClick={() => removeProduct(index)}
+                            className="rounded-md bg-rose-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-rose-600"
+                          >
+                            Remove
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section className={`${sectionCardClass} p-5 sm:p-6`}>
+            <div className="mb-5 border-b border-slate-100 pb-4">
+              <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-700">
+                Invoice Options
+              </h2>
+
+              <p className="mt-1 text-sm text-slate-500">
+                Choose what should appear in the generated invoice.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <label className="flex items-center gap-3 rounded-xl border border-slate-200 p-4 cursor-pointer hover:border-emerald-500">
+                <input
+                  type="checkbox"
+                  checked={includeSummary}
+                  onChange={(e) => setIncludeSummary(e.target.checked)}
+                />
+                <span>Include Transaction Summary</span>
+              </label>
+
+              <label className="flex items-center gap-3 rounded-xl border border-slate-200 p-4 cursor-pointer hover:border-emerald-500">
+                <input
+                  type="checkbox"
+                  checked={includeWatermark}
+                  onChange={(e) => setIncludeWatermark(e.target.checked)}
+                />
+                <span>Include Watermark</span>
+              </label>
+
+              <label className="flex items-center gap-3 rounded-xl border border-slate-200 p-4 cursor-pointer hover:border-emerald-500">
+                <input
+                  type="checkbox"
+                  checked={showPTR}
+                  onChange={(e) => setShowPTR(e.target.checked)}
+                />
+                <span>Show PTR</span>
+              </label>
+
+              <label className="flex items-center gap-3 rounded-xl border border-slate-200 p-4 cursor-pointer hover:border-emerald-500">
+                <input
+                  type="checkbox"
+                  checked={showPTS}
+                  onChange={(e) => setShowPTS(e.target.checked)}
+                />
+                <span>Show PTS</span>
+              </label>
+            </div>
+          </section>
+
+          <div className="flex gap-3">
+            {installPrompt && (
+              <button
+                type="button"
+                onClick={installApp}
+                className="rounded-2xl border border-emerald-600 px-6 py-3.5 font-semibold text-emerald-600 transition hover:bg-emerald-50"
+              >
+                Install App
+              </button>
+            )}
+
+            <button
+              onClick={generateInvoice}
+              className="flex-1 rounded-2xl bg-linear-to-r from-emerald-600 to-teal-600 py-3.5 font-semibold text-white"
+            >
+              Generate Invoice
+            </button>
+          </div>
         </div>
-
-        <br />
-
-        <div className="print-toolbar">
-        <div className="toolbar-actions">
-          <button onClick={addRow}>
-            Add New Line
-          </button>
-
-          <button onClick={() => window.print()}>
-            Download Invoice
-          </button>
-
-          <button onClick={() => router.push("/form")}>
-            New Invoice
-          </button>
-        </div>
-
-        <label
-          htmlFor="includeSummary"
-          className="summary-toggle"
-        >
-          <input
-            type="checkbox"
-            id="includeSummary"
-            checked={includeSummary}
-            onChange={(e) =>
-              setIncludeSummary(
-                e.target.checked
-              )
-            }
-          />
-
-          <span>
-            Include Transaction Summary
-          </span>
-        </label>
-
-        <label
-          htmlFor="includeWatermark"
-          className="summary-toggle"
-        >
-          <input
-            type="checkbox"
-            id="includeWatermark"
-            checked={includeWatermark}
-            onChange={(e) =>
-              setIncludeWatermark(
-                e.target.checked
-              )
-            }
-          />
-
-          <span>
-            Include Watermark
-          </span>
-        </label>
-
-        <label className="summary-toggle">
-          <input
-            type="checkbox"
-            checked={showPTR}
-            onChange={(e) =>
-              setShowPTR(e.target.checked)
-            }
-          />
-
-          <span>Show PTR</span>
-        </label>
-
-        <label className="summary-toggle">
-          <input
-            type="checkbox"
-            checked={showPTS}
-            onChange={(e) =>
-              setShowPTS(e.target.checked)
-            }
-          />
-
-          <span>Show PTS</span>
-        </label>
       </div>
 
-
-        <div className="summary-row">
-          <div className="gst-summary">
-            <table>
-              <thead>
-                <tr>
-                  <th>CLASS</th>
-                  <th>SUB TOTAL</th>
-                  <th>SGST</th>
-                  <th>CGST</th>
-                  <th>TOTAL</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {[5, 12, 18, 28].map((gst) => (
-                  <tr key={gst}>
-                    <td>GST {gst}%</td>
-
-                    <td>
-                      {
-                        gstSummary[
-                          gst as 5 | 12 | 18 | 28
-                        ].amount.toFixed(2)
-                      }
-                    </td>
-
-                    <td>
-                      {
-                        gstSummary[
-                          gst as 5 | 12 | 18 | 28
-                        ].sgst.toFixed(2)
-                      }
-                    </td>
-
-                    <td>
-                      {
-                        gstSummary[
-                          gst as 5 | 12 | 18 | 28
-                        ].cgst.toFixed(2)
-                      }
-                    </td>
-
-                    <td>
-                      {(
-                        gstSummary[
-                          gst as 5 | 12 | 18 | 28
-                        ].sgst +
-                        gstSummary[
-                          gst as 5 | 12 | 18 | 28
-                        ].cgst
-                      ).toFixed(2)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="totals-panel">
-            <div>
-              <span>SUB TOTAL</span>
-
-              <span>
-                ₹
-                {items
-                  .reduce(
-                    (sum, item) =>
-                      sum +
-                      calculateRow(item).amount,
-                    0
-                  )
-                  .toFixed(2)}
-              </span>
-            </div>
-
-            <div>
-              <span>GST PAYABLE</span>
-
-              <span>
-                ₹
-                {items
-                  .reduce(
-                    (sum, item) =>
-                      sum +
-                      calculateRow(item).sgst +
-                      calculateRow(item).cgst,
-                    0
-                  )
-                  .toFixed(2)}
-              </span>
-            </div>
-
-            <div>
-              <span>NET TOTAL</span>
-
-              <span>
-                ₹
-                {grandTotal.toFixed(2)}
-              </span>
-            </div>
-
-            <div className="grand-total">
-              <span>GRAND TOTAL</span>
-
-              <span>
-                ₹
-                {grandTotal.toFixed(2)}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="bottom-section">
-          <div className="terms-box">
-            <h4>Terms & Conditions</h4>
-
-            <p>
-              GOODS ONCE SOLD WILL NOT BE TAKEN BACK OR EXCHANGED.
-            </p>
-
-            <p>
-              ALL DISPUTES ARE SUBJECTED TO JURISDICTION ONLY.
-            </p>
-
-            <p>
-              BILLS NOT PAID BY DUE DATE WILL ATTRACT 24% INTEREST.
-            </p>
-          </div>
-
-          <div className="bank-details">
-            <h4>Bank Details</h4>
-
-            <p>
-              <strong>Name:</strong> AL HIRAJ DISTRIBUTOR
-            </p>
-
-            <p>
-              <strong>Bank:</strong> Bank of Baroda
-            </p>
-
-            <p>
-              <strong>Account:</strong> 97510000203176
-            </p>
-
-            <p>
-              <strong>IFSC:</strong> BARB0VJCHIK
-            </p>
-          </div>
-
-          <div className="qr-section">
-            <img
-              src="/upi-id.jpg"
-              alt="QR"
-              className="qr-image"
-            />
-          </div>
-
-          <div className="signature-section">
-            <div className="signature-content">
-              <h4>Authorized Signature</h4>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-
-      <div
-        className={`transaction-summary ${
-          includeSummary
-            ? "show-summary"
-            : "hide-summary"
-        }`}
-      >
-        <h3>Transaction Summary</h3>
-
-        <p><strong>No:</strong> {invoiceNo}</p>
-        <p><strong>Date:</strong> {invoiceDate}</p>
-        <p><strong>Total:</strong></p>
-        <h2>₹{grandTotal.toFixed(2)}</h2>
-      </div>
+      <datalist id="customer-list">
+        {savedCustomers.map((c) => (
+          <option
+            key={c.customerName}
+            value={c.customerName}
+          />
+        ))}
+      </datalist>
     </div>
   );
 }

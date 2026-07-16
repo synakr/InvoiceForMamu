@@ -12,7 +12,6 @@ type InvoiceItem = {
   free: string;
   mrp: string;
   ptr: number;
-  pts: number;
   rate: number;
   discount: number;
   gst: number;
@@ -40,8 +39,7 @@ const [invoiceDate, setInvoiceDate] = useState(
   new Date().toISOString().split("T")[0]
 );
 
-const [showPTR, setShowPTR] = useState(true);
-const [showPTS, setShowPTS] = useState(true);
+const [ptrPtsVersion, setPtrPtsVersion] = useState(false);
 
 const [customer, setCustomer] = useState({
   customerName: "",
@@ -74,7 +72,6 @@ const [items, setItems] = useState<InvoiceItem[]>([
     free: "",
     mrp: "",
     ptr: 0,
-    pts: 0,
     rate: 1,
     discount: 0,
     gst: 18,
@@ -100,8 +97,7 @@ useEffect(() => {
 
     setIncludeSummary(data.includeSummary ?? true);
     setIncludeWatermark(data.includeWatermark ?? true);
-    setShowPTR(data.showPTR ?? true);
-    setShowPTS(data.showPTS ?? true);
+    setPtrPtsVersion(data.ptrPtsVersion ?? false);
 
     if (data.customer) {
       setCustomer(data.customer);
@@ -139,21 +135,22 @@ const updateItem = (
 };
 
 const addRow = () => {
+  const lastItem = items[items.length - 1];
+
   setItems([
     ...items,
     {
       product: "",
-      hsn: "",
+      hsn: lastItem?.hsn ?? "",
       batchNo: "",
       expiry: "",
       quantity: 1,
       free: "",
       mrp: "",
-      ptr: 0,
-      pts: 0,
+      ptr: lastItem?.ptr ?? 0,
       rate: 1,
       discount: 0,
-      gst: 18,
+      gst: lastItem?.gst ?? 18,
     },
   ]);
 };
@@ -410,75 +407,101 @@ const CellInput = ({
 
             <thead>
               <tr>
-                <th className={`${thClass} w-[42px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
+                <th
+                  className={`${thClass} w-[42px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}
+                >
                   Sl No.
                 </th>
 
-                <th className={`${thClass} print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
+                <th
+                  className={`${thClass} print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}
+                >
                   Product
                 </th>
 
-                <th className={`${thClass} w-[90px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
+                <th
+                  className={`${thClass} w-[90px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}
+                >
                   HSN
                 </th>
 
-                <th className={`${thClass} w-[90px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
+                <th
+                  className={`${thClass} w-[90px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}
+                >
                   Batch
                 </th>
 
-                <th className={`${thClass} w-[78px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
+                <th
+                  className={`${thClass} w-[78px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}
+                >
                   Expiry
                 </th>
 
-                <th className={`${thClass} w-[48px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
+                <th
+                  className={`${thClass} w-[48px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}
+                >
                   Qty
                 </th>
 
-                <th className={`${thClass} w-[55px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
+                <th
+                  className={`${thClass} w-[55px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}
+                >
                   Free
                 </th>
 
-                <th className={`${thClass} w-[58px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
+                <th
+                  className={`${thClass} w-[58px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}
+                >
                   MRP
                 </th>
 
-                {showPTR && (
-                  <th className={`${thClass} w-[58px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
+                {ptrPtsVersion && (
+                  <th
+                    className={`${thClass} w-[58px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}
+                  >
                     PTR
                   </th>
                 )}
 
-                {showPTS && (
-                  <th className={`${thClass} w-[58px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
-                    PTS
-                  </th>
-                )}
-
-                <th className={`${thClass} w-[58px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
-                  Rate
+                <th
+                  className={`${thClass} w-[58px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}
+                >
+                  {ptrPtsVersion ? "PTS" : "Rate"}
                 </th>
 
-                <th className={`${thClass} w-[48px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
+                <th
+                  className={`${thClass} w-[48px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}
+                >
                   Dis%
                 </th>
 
-                <th className={`${thClass} print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
+                <th
+                  className={`${thClass} print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}
+                >
                   Amount
                 </th>
 
-                <th className={`${thClass} w-[48px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
+                <th
+                  className={`${thClass} w-[48px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}
+                >
                   GST
                 </th>
 
-                <th className={`${thClass} w-[55px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
+                <th
+                  className={`${thClass} w-[55px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}
+                >
                   SGST
                 </th>
 
-                <th className={`${thClass} w-[55px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
+                <th
+                  className={`${thClass} w-[55px] print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}
+                >
                   CGST
                 </th>
 
-                <th className={`${thClass} print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}>
+                <th
+                  className={`${thClass} print:border-black print:px-[3px] print:py-[2px] print:text-[11px]`}
+                >
                   Total
                 </th>
               </tr>
@@ -558,25 +581,13 @@ const CellInput = ({
                       />
                     </td>
 
-                    {showPTR && (
+                    {ptrPtsVersion && (
                       <td className={printTd}>
                         <CellInput
                           type="number"
                           value={item.ptr}
                           onChange={(v) =>
                             updateItem(index, "ptr", Number(v))
-                          }
-                        />
-                      </td>
-                    )}
-
-                    {showPTS && (
-                      <td className={printTd}>
-                        <CellInput
-                          type="number"
-                          value={item.pts}
-                          onChange={(v) =>
-                            updateItem(index, "pts", Number(v))
                           }
                         />
                       </td>
@@ -635,11 +646,7 @@ const CellInput = ({
             <tfoot>
               <tr>
                 <td
-                  colSpan={
-                    14 +
-                    (showPTR ? 1 : 0) +
-                    (showPTS ? 1 : 0)
-                  }
+                  colSpan={14 + (ptrPtsVersion ? 1 : 0)}
                   className="border border-gray-500 bg-gray-50 px-1 py-[3px] text-right text-[12px] font-bold print:border-black print:px-[3px] print:py-[2px] print:text-[11px]"
                 >
                   Grand Total

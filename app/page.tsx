@@ -11,6 +11,7 @@ type InvoiceItem = {
   quantity: number;
   free: string;
   mrp: string;
+  ptr: number;
   rate: number;
   discount: number;
   gst: number;
@@ -76,9 +77,7 @@ const [includeSummary, setIncludeSummary] =
 const [includeWatermark, setIncludeWatermark] =
   useState(true);
 
-const [showPTR, setShowPTR] = useState(true);
-
-const [showPTS, setShowPTS] = useState(true);
+const [ptrPtsVersion, setPtrPtsVersion] = useState(false);
 
 const emptyItem = (): InvoiceItem => ({
   product: "",
@@ -88,6 +87,7 @@ const emptyItem = (): InvoiceItem => ({
   quantity: 1,
   free: "",
   mrp: "",
+  ptr: 0,
   rate: 1,
   discount: 0,
   gst: 18,
@@ -117,6 +117,7 @@ const addProduct = () => {
     ...emptyItem(),
     gst: currentItem.gst,
     hsn: currentItem.hsn,
+    ptr: currentItem.ptr,
   });
 };
 
@@ -144,8 +145,7 @@ const generateInvoice = () => {
 
       includeSummary,
       includeWatermark,
-      showPTR,
-      showPTS,
+      ptrPtsVersion,
 
       customer,
 
@@ -501,8 +501,29 @@ useEffect(() => {
               </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12">
-                <div className="flex min-w-0 flex-col gap-2 lg:col-span-4">
-                  <label className={labelClass}>Rate</label>
+                {ptrPtsVersion && (
+                  <div className="flex min-w-0 flex-col gap-2 lg:col-span-3">
+                    <label className={labelClass}>PTR</label>
+                    <input
+                      type="number"
+                      value={currentItem.ptr}
+                      onChange={(e) =>
+                        updateItem("ptr", Number(e.target.value))
+                      }
+                      className={inputClass}
+                    />
+                  </div>
+                )}
+
+                <div
+                  className={`flex min-w-0 flex-col gap-2 ${
+                    ptrPtsVersion ? "lg:col-span-3" : "lg:col-span-4"
+                  }`}
+                >
+                  <label className={labelClass}>
+                    {ptrPtsVersion ? "PTS" : "Rate"}
+                  </label>
+
                   <input
                     type="number"
                     value={currentItem.rate}
@@ -513,8 +534,13 @@ useEffect(() => {
                   />
                 </div>
 
-                <div className="flex min-w-0 flex-col gap-2 lg:col-span-4">
+                <div
+                  className={`flex min-w-0 flex-col gap-2 ${
+                    ptrPtsVersion ? "lg:col-span-3" : "lg:col-span-4"
+                  }`}
+                >
                   <label className={labelClass}>Disc %</label>
+
                   <input
                     type="number"
                     value={currentItem.discount}
@@ -525,8 +551,13 @@ useEffect(() => {
                   />
                 </div>
 
-                <div className="flex min-w-0 flex-col gap-2 lg:col-span-4">
+                <div
+                  className={`flex min-w-0 flex-col gap-2 ${
+                    ptrPtsVersion ? "lg:col-span-3" : "lg:col-span-4"
+                  }`}
+                >
                   <label className={labelClass}>GST %</label>
+
                   <input
                     type="number"
                     value={currentItem.gst}
@@ -630,19 +661,10 @@ useEffect(() => {
               <label className="flex items-center gap-3 rounded-xl border border-slate-200 p-4 cursor-pointer hover:border-emerald-500">
                 <input
                   type="checkbox"
-                  checked={showPTR}
-                  onChange={(e) => setShowPTR(e.target.checked)}
+                  checked={ptrPtsVersion}
+                  onChange={(e) => setPtrPtsVersion(e.target.checked)}
                 />
-                <span>Show PTR</span>
-              </label>
-
-              <label className="flex items-center gap-3 rounded-xl border border-slate-200 p-4 cursor-pointer hover:border-emerald-500">
-                <input
-                  type="checkbox"
-                  checked={showPTS}
-                  onChange={(e) => setShowPTS(e.target.checked)}
-                />
-                <span>Show PTS</span>
+                <span>PTR/PTS Version</span>
               </label>
             </div>
           </section>
